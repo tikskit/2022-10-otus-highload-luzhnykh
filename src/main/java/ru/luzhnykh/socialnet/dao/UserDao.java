@@ -2,6 +2,8 @@ package ru.luzhnykh.socialnet.dao;
 
 import ru.luzhnykh.socialnet.domain.User;
 
+import java.util.Optional;
+
 /**
  * DAO пользователя
  */
@@ -17,7 +19,6 @@ public interface UserDao {
      * Получить пользователя по идентификатору
      *
      * @param id Идентификатор пользователя
-     * @return
      */
-    User getUser(Long id);
+    Optional<User> getUser(Long id);
 }

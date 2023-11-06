@@ -1,6 +1,7 @@
 package ru.luzhnykh.socialnet.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -9,6 +10,7 @@ import ru.luzhnykh.socialnet.enums.Sex;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 /**
  * Реализация UserDao на Jdbc
@@ -25,7 +27,7 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public void addUser(User user) {
-        jdbc.update("insert into users(firstname, lastname, dob, sex, biography, city) values(?, ?, ?, ?, ?, ?)",
+        jdbc.update("insert into socnet.users(firstname, lastname, dob, sex, biography, city) values(?, ?, ?, ?, ?, ?)",
                 user.getFirstName(), user.getLastName(), user.getDob(), user.getSex(), user.getBiography(), user.getCity());
     }
 
@@ -36,9 +38,19 @@ public class UserDaoJdbc implements UserDao {
      * @return Пользователь
      */
     @Override
-    public User getUser(Long id) {
-        return jdbc.queryForObject("select id, firstname, lastname, dob, sex, biography, city from users where id=?",
-                new UserMapper(), id);
+    public Optional<User> getUser(Long id) {
+        try {
+            return Optional.ofNullable(
+                    jdbc.queryForObject("select id, firstname, lastname, dob, sex, biography, city from socnet.users where id=?",
+                            new UserMapper(), id)
+            );
+        } catch(IncorrectResultSizeDataAccessException e) {
+            if (e.getActualSize() == 0) {
+                return Optional.empty();
+            } else {
+                throw e;
+            }
+        }
     }
 
     private static class UserMapper implements RowMapper<User> {
