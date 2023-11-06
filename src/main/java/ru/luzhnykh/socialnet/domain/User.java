@@ -18,6 +18,11 @@ public class User {
     private final Long id;
 
     /**
+     * Имя аккаунт
+     */
+    private final String login;
+
+    /**
      * Имя
      */
     private final String firstName;

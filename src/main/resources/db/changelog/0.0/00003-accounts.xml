@@ -8,30 +8,19 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="00001-user" author="tikskit">
+    <changeSet id="00001-accounts" author="tikskit">
         <preConditions>
             <not>
-                <tableExists tableName="users" schemaName="socnet"/>
+                <tableExists tableName="accounts" schemaName="socnet"/>
             </not>
         </preConditions>
-        <createTable tableName="users" schemaName="socnet">
-            <column name="id" type="serial">
-                <constraints primaryKey="true" primaryKeyName="pk_user"/>
+        <createTable tableName="accounts" schemaName="socnet">
+            <column name="login" type="varchar(20)">
+                <constraints primaryKey="true" primaryKeyName="pk_account"/>
             </column>
-            <column name="firstname" type="varchar(50)">
+            <column name="passhash" type="integer">
                 <constraints nullable="false"/>
             </column>
-            <column name="lastname" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="dob" type="date">
-                <constraints nullable="false"/>
-            </column>
-            <column name="sex" type="smallint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="biography" type="varchar"/>
-            <column name="city" type="varchar(50)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

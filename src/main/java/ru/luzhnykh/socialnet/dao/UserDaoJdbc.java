@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.luzhnykh.socialnet.domain.User;
+import ru.luzhnykh.socialnet.dto.UserDto;
 import ru.luzhnykh.socialnet.enums.Sex;
 
 import java.sql.ResultSet;
@@ -26,9 +27,9 @@ public class UserDaoJdbc implements UserDao {
      * @param user Пользователь
      */
     @Override
-    public void addUser(User user) {
+    public void addUser(UserDto user) {
         jdbc.update("insert into socnet.users(firstname, lastname, dob, sex, biography, city) values(?, ?, ?, ?, ?, ?)",
-                user.getFirstName(), user.getLastName(), user.getDob(), user.getSex(), user.getBiography(), user.getCity());
+                user.firstName(), user.lastName(), user.dob(), user.sex(), user.biography(), user.city());
     }
 
     /**
@@ -41,7 +42,7 @@ public class UserDaoJdbc implements UserDao {
     public Optional<User> getUser(Long id) {
         try {
             return Optional.ofNullable(
-                    jdbc.queryForObject("select id, firstname, lastname, dob, sex, biography, city from socnet.users where id=?",
+                    jdbc.queryForObject("select id, login, firstname, lastname, dob, sex, biography, city from socnet.users where id=?",
                             new UserMapper(), id)
             );
         } catch(IncorrectResultSizeDataAccessException e) {
@@ -58,6 +59,7 @@ public class UserDaoJdbc implements UserDao {
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new User(
                     rs.getLong("id"),
+                    rs.getString("login"),
                     rs.getString("firstname"),
                     rs.getString("lastname"),
                     rs.getDate("dob").toLocalDate(),
