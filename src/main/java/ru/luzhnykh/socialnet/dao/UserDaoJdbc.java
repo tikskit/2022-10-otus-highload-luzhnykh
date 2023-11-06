@@ -25,8 +25,8 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public void addUser(User user) {
-        jdbc.update("insert into users(firstname, lastname, age, sex, interests, city) values(?, ?, ?, ?, ?, ?)",
-                user.getFirstName(), user.getLastName(), user.getAge(), user.getSex(), user.getInterests(), user.getCity());
+        jdbc.update("insert into users(firstname, lastname, dob, sex, biography, city) values(?, ?, ?, ?, ?, ?)",
+                user.getFirstName(), user.getLastName(), user.getDob(), user.getSex(), user.getBiography(), user.getCity());
     }
 
     /**
@@ -37,7 +37,7 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public User getUser(Long id) {
-        return jdbc.queryForObject("select id, firstname, lastname, age, sex, interests, city from users where id=?",
+        return jdbc.queryForObject("select id, firstname, lastname, dob, sex, biography, city from users where id=?",
                 new UserMapper(), id);
     }
 
@@ -48,9 +48,9 @@ public class UserDaoJdbc implements UserDao {
                     rs.getLong("id"),
                     rs.getString("firstname"),
                     rs.getString("lastname"),
-                    rs.getInt("age"),
+                    rs.getDate("dob").toLocalDate(),
                     Sex.getById(rs.getInt("sex")),
-                    rs.getString("interests"),
+                    rs.getString("biography"),
                     rs.getString("city")
             );
         }

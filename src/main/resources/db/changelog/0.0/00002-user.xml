@@ -24,13 +24,13 @@
             <column name="lastname" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="age" type="smallint">
+            <column name="dob" type="date">
                 <constraints nullable="false"/>
             </column>
             <column name="sex" type="smallint">
                 <constraints nullable="false"/>
             </column>
-            <column name="interests" type="varchar"/>
+            <column name="biography" type="varchar"/>
             <column name="city" type="varchar(50)"/>
         </createTable>
     </changeSet>

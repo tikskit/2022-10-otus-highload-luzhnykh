@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import ru.luzhnykh.socialnet.enums.Sex;
 
+import java.time.LocalDate;
+
 /**
  * Доменная сущность Пользователь
  */
@@ -26,9 +28,9 @@ public class User {
     private final String lastName;
 
     /**
-     * Возраст
+     * Дата рождения
      */
-    private final int age;
+    private final LocalDate dob;
 
     /**
      * Пол
@@ -38,7 +40,7 @@ public class User {
     /**
      * Интересы
      */
-    private final String interests;
+    private final String biography;
 
     /**
      * Город
