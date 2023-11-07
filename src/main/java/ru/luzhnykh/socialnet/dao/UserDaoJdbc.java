@@ -5,9 +5,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import ru.luzhnykh.socialnet.domain.User;
 import ru.luzhnykh.socialnet.dto.UserDto;
-import ru.luzhnykh.socialnet.enums.Sex;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,8 +26,8 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public void addUser(UserDto user) {
-        jdbc.update("insert into socnet.users(firstname, lastname, dob, sex, biography, city) values(?, ?, ?, ?, ?, ?)",
-                user.firstName(), user.lastName(), user.dob(), user.sex(), user.biography(), user.city());
+        jdbc.update("insert into socnet.users(userid, firstname, lastname, dob, biography, city) values(?, ?, ?, ?, ?, ?)",
+                user.id(), user.first_name(), user.second_name(), user.birthdate(), user.biography(), user.city());
     }
 
     /**
@@ -39,13 +37,13 @@ public class UserDaoJdbc implements UserDao {
      * @return Пользователь
      */
     @Override
-    public Optional<User> getUser(Long id) {
+    public Optional<UserDto> getUser(String id) {
         try {
             return Optional.ofNullable(
-                    jdbc.queryForObject("select id, login, firstname, lastname, dob, sex, biography, city from socnet.users where id=?",
+                    jdbc.queryForObject("select userid, firstname, lastname, dob, biography, city from socnet.users where userid=?",
                             new UserMapper(), id)
             );
-        } catch(IncorrectResultSizeDataAccessException e) {
+        } catch (IncorrectResultSizeDataAccessException e) {
             if (e.getActualSize() == 0) {
                 return Optional.empty();
             } else {
@@ -54,16 +52,14 @@ public class UserDaoJdbc implements UserDao {
         }
     }
 
-    private static class UserMapper implements RowMapper<User> {
+    private static class UserMapper implements RowMapper<UserDto> {
         @Override
-        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new User(
-                    rs.getLong("id"),
-                    rs.getString("login"),
+        public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return new UserDto(
+                    rs.getString("userid"),
                     rs.getString("firstname"),
                     rs.getString("lastname"),
                     rs.getDate("dob").toLocalDate(),
-                    Sex.getById(rs.getInt("sex")),
                     rs.getString("biography"),
                     rs.getString("city")
             );

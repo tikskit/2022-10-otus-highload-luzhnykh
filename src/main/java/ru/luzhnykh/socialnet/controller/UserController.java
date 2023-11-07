@@ -1,14 +1,14 @@
 package ru.luzhnykh.socialnet.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
-import ru.luzhnykh.socialnet.domain.User;
+import org.springframework.web.bind.annotation.*;
+import ru.luzhnykh.socialnet.dto.*;
 import ru.luzhnykh.socialnet.exceptions.IllegalUserIdException;
 import ru.luzhnykh.socialnet.exceptions.UserNotFoundException;
+import ru.luzhnykh.socialnet.service.AccountService;
+import ru.luzhnykh.socialnet.service.TokenService;
 import ru.luzhnykh.socialnet.service.UserService;
 
 @RestController
@@ -16,14 +16,38 @@ import ru.luzhnykh.socialnet.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final AccountService accountService;
+    private final TokenService tokenService;
 
     @GetMapping("/user/get/{id}")
-    public User getUser(@PathVariable Long id) {
-        return userService.getUser(id).orElseThrow(() -> new UserNotFoundException(String.format("Пользователь %s не найден", id)));
+    public ResponseEntity<UserDto> getUser(@PathVariable String id, @RequestHeader String token) {
+        if (tokenService.validate(token)) {
+            return userService.getUser(id)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new UserNotFoundException(String.format("Пользователь '%s' не найден", id)));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
     @ExceptionHandler({UserNotFoundException.class, IllegalUserIdException.class})
     public ResponseEntity<String> handleIllegalUserId(RuntimeException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<LoginResultDto> login(@RequestBody LoginDto loginDto) {
+        return accountService.login(loginDto).map(token -> ResponseEntity.ok(new LoginResultDto(token)))
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
+
+    @PostMapping("/user/register")
+    public ResponseEntity<UserRegisterResult> register(@RequestBody UserRegisterDto user, @RequestHeader String token) {
+        if (tokenService.validate(token)) {
+            return ResponseEntity.ok(new UserRegisterResult(userService.register(user)));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }

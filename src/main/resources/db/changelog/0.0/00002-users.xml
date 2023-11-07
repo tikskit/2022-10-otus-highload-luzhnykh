@@ -15,11 +15,8 @@
             </not>
         </preConditions>
         <createTable tableName="users" schemaName="socnet">
-            <column name="id" type="serial">
+            <column name="userid" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_users"/>
-            </column>
-            <column name="login">
-                <constraints nullable="false" unique="true"/>
             </column>
             <column name="firstname" type="varchar(50)">
                 <constraints nullable="false"/>
@@ -28,9 +25,6 @@
                 <constraints nullable="false"/>
             </column>
             <column name="dob" type="date">
-                <constraints nullable="false"/>
-            </column>
-            <column name="sex" type="smallint">
                 <constraints nullable="false"/>
             </column>
             <column name="biography" type="varchar"/>

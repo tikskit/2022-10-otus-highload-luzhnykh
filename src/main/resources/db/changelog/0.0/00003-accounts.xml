@@ -15,7 +15,7 @@
             </not>
         </preConditions>
         <createTable tableName="accounts" schemaName="socnet">
-            <column name="login" type="varchar(20)">
+            <column name="userid" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_account"/>
             </column>
             <column name="passhash" type="integer">

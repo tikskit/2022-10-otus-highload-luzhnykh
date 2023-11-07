@@ -18,17 +18,21 @@ public class AccountDaoJdbc implements AccountDao {
 
     @Override
     public void addAccount(AccountDto account) {
-        jdbc.update("insert into socnet.accounts(login, passhash) values(?, ?)", account.login(), account.passHash());
+        jdbc.update("insert into socnet.accounts(userid, passhash) values(?, ?)", account.userId(), account.passHash());
     }
 
     @Override
     public boolean match(AccountDto account) {
         try {
-            jdbc.queryForObject("select login, passhash from socnet.accounts where login=? and passhash=?",
-                    new AccountMapper(), account.login(), account.passHash());
+            jdbc.queryForObject("select userid, passhash from socnet.accounts where login=? and passhash=?",
+                    new AccountMapper(), account.userId(), account.passHash());
             return true;
         } catch (IncorrectResultSizeDataAccessException e) {
-            return false;
+            if (e.getActualSize() == 0) {
+                return false;
+            } else {
+                throw e;
+            }
         }
     }
 
@@ -36,7 +40,7 @@ public class AccountDaoJdbc implements AccountDao {
         @Override
         public AccountDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new AccountDto(
-                    rs.getString("login"),
+                    rs.getString("userid"),
                     rs.getInt("passhash")
             );
         }
