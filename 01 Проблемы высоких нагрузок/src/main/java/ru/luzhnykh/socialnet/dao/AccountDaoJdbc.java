@@ -24,7 +24,7 @@ public class AccountDaoJdbc implements AccountDao {
     @Override
     public boolean match(AccountDto account) {
         try {
-            jdbc.queryForObject("select userid, passhash from socnet.accounts where login=? and passhash=?",
+            jdbc.queryForObject("select userid, passhash from socnet.accounts where userid=? and passhash=?",
                     new AccountMapper(), account.userId(), account.passHash());
             return true;
         } catch (IncorrectResultSizeDataAccessException e) {
