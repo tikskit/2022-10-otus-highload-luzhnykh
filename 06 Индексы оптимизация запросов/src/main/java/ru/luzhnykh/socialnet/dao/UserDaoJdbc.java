@@ -77,7 +77,7 @@ public class UserDaoJdbc implements UserDao {
     @Override
     public List<UserDto> search(String firstName, String lastName) {
         return jdbc.query(
-                "select userid, firstname, lastname, dob, biography, city from socnet.users where firstname=? and lastname=?",
-                new UserMapper(), firstName, lastName);
+                "select userid, firstname, lastname, dob, biography, city from socnet.users where firstname like ? and lastname like ? order by userid",
+                new UserMapper(), firstName + '%', lastName + '%');
     }
 }
