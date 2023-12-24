@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "ee741009-5510-40d7-9736-bb515964db97",
+		"name": "01 Проблемы высоких нагрузок",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18165428"
+	},
+	"item": [
+		{
+			"name": "/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"user1\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "bd154f98-1256-4ae0-9b97-96d76e331dee",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/user/get/fd6f67c3-4bf7-4242-9740-43e44199bc1e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"get",
+						"fd6f67c3-4bf7-4242-9740-43e44199bc1e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "af8f6b8d-109a-44db-9786-f5ef67a2fe22",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"user1\",\r\n    \"first_name\": \"firstName\",\r\n    \"second_name\": \"lastName\",\r\n    \"birthdate\": \"2001-05-07\",\r\n    \"sex\": 1,\r\n    \"biography\": \"none\",\r\n    \"city\": \"NY\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"register"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "b86b794e-b4c0-4cff-9c03-7e9483e3897e",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
