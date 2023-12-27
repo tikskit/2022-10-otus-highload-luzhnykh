@@ -1,0 +1,16 @@
+# —оздаем сеть
+docker network create socnetnet
+
+# получаем subnet созданной сети
+docker network inspect pgnet   
+"Subnet": "172.18.0.0/16"
+
+# —обираем образ докер
+docker build -t socnet_app_10:latest .
+
+# «апускаем постгрис
+docker run -d -p 55432:5432 --network=socnetnet --name socnetmaster -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=dbuser -e POSTGRES_DB=soc_net postgres:16
+
+# «апускаем приложение и передаем ему строку подключени€ к мастеру. ѕервый раз запускаетс€ долго, потому что проливаютс€ данные с миллионом пользователей. можно смотреть логи docker logs socnet -f чтобы видеть когда готово
+docker run -dit -p 8080:8080 -p 1234:1234 --name socnet --network=socnetnet -e DB_URL=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER=dbuser -e DB_PASS=pass socnet_app_10
+
