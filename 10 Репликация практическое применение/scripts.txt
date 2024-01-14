@@ -9,8 +9,9 @@ docker network inspect pgnet
 docker build -t socnet_app_10:latest .
 
 # «апускаем постгрис
-docker run -d -p 55432:5432 --network=socnetnet --name socnetmaster -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=dbuser -e POSTGRES_DB=soc_net postgres:16
+docker run -d -p 55432:5432 --cpus=4 -m 256m -v "F:\OTUS\HighLoad\db\hw10\pgmaster:/var/lib/postgresql/data" --network=socnetnet --name socnetmaster --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=dbuser -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
 
 # «апускаем приложение и передаем ему строку подключени€ к мастеру. ѕервый раз запускаетс€ долго, потому что проливаютс€ данные с миллионом пользователей. можно смотреть логи docker logs socnet -f чтобы видеть когда готово
-docker run -dit -p 8080:8080 -p 1234:1234 --name socnet --network=socnetnet -e DB_URL=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER=dbuser -e DB_PASS=pass socnet_app_10
+# также прокидываем наружу порты JMX дл€ мониторинга memory, cpu приложени€
+docker run -dit -p 8080:8080 -p 1234:1234 --cpus=2 --name socnet --network=socnetnet -e DB_URL=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER=dbuser -e DB_PASS=pass socnet_app_10
 

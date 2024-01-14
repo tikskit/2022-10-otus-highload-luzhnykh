@@ -1,6 +1,7 @@
 package ru.luzhnykh.socialnet.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserService userService;
@@ -57,6 +59,7 @@ public class UserController {
     public ResponseEntity<List<UserDto>> search(@RequestParam("first_name") String firstName,
                                                 @RequestParam("last_name") String lastName,
                                                 @RequestHeader String token) {
+        log.debug("/user/search first_name={} last_name = {}", firstName, lastName);
         if (tokenService.validate(token)) {
             return ResponseEntity.ok(userService.search(firstName, lastName));
         } else {
