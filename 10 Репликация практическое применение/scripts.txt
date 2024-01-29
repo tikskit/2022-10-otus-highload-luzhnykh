@@ -1,0 +1,28 @@
+# Создаем сеть
+docker network create socnetnet
+
+# получаем subnet созданной сети
+docker network inspect socnetnet   
+"Subnet": "172.18.0.0/16"
+
+# Собираем образ докер
+docker build -t socnet_app_10:latest .
+
+# Запускаем master
+docker run -d -p 5432:5432 --cpus=4 -m 1Gb -v "F:\OTUS\HighLoad\db\hw10\socnetmaster:/var/lib/postgresql/data" --network=socnetnet --name socnetmaster --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+#slave1
+docker run -d -p 15432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw10\socnetslave1:/var/lib/postgresql/data" --network=socnetnet --name socnetslave1 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+
+# Запускаем приложение и передаем ему строку подключения к мастеру и чтение и запись делаем на мастер. 
+docker run -dit -p 8080:8080 -p 1234:1234 --cpus=10 --name socnet --network=socnetnet -e DB_URL_MASTER=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER_MASTER=postgres -e DB_PASS_MASTER=pass -e DB_URL_SLAVE=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER_SLAVE=postgres -e DB_PASS_SLAVE=pass socnet_app_10
+# Запускаем приложение и передаем ему строку подключения к мастеру и слейву. Чтение делаем со слейва, запись на мастер. 
+docker run -dit -p 8080:8080 -p 1234:1234 --cpus=10 --name socnet --network=socnetnet -e DB_URL_MASTER=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER_MASTER=postgres -e DB_PASS_MASTER=pass -e DB_URL_SLAVE=jdbc:postgresql://socnetslave1:5432/soc_net -e DB_USER_SLAVE=postgres -e DB_PASS_SLAVE=pass socnet_app_10
+
+
+
+
+#запускаем синхронную реплику 1
+docker run -d -p 25432:5432 --cpus=4 -m 1Gb -v "F:\OTUS\HighLoad\db\hw10\socnetslavesync1:/var/lib/postgresql/data" --network=socnetnet --name socnetslavesync1 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+
+#запускаем синхронную реплику 1
+docker run -d -p 35432:5432 --cpus=4 -m 1Gb -v "F:\OTUS\HighLoad\db\hw10\socnetslavesync2:/var/lib/postgresql/data" --network=socnetnet --name socnetslavesync2 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200

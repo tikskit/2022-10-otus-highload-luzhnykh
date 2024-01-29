@@ -1,0 +1,13 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_RUL=jdbc:postgresql://localhost:55432/soc_net
+      - DB_USER=dbuser
+      - DB_PASS=pass
