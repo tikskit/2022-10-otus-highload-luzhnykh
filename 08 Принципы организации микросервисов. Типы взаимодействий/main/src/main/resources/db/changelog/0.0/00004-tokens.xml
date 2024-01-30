@@ -8,18 +8,15 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-    <changeSet id="00001-accounts" author="tikskit">
+    <changeSet id="00001-tokens" author="tikskit">
         <preConditions>
             <not>
-                <tableExists tableName="accounts" schemaName="socnet"/>
+                <tableExists tableName="tokens" schemaName="socnet"/>
             </not>
         </preConditions>
-        <createTable tableName="accounts" schemaName="socnet">
-            <column name="userid" type="varchar(36)">
-                <constraints primaryKey="true" primaryKeyName="pk_account"/>
-            </column>
-            <column name="passhash" type="integer">
-                <constraints nullable="false"/>
+        <createTable tableName="tokens" schemaName="socnet">
+            <column name="token" type="varchar(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_token"/>
             </column>
         </createTable>
     </changeSet>

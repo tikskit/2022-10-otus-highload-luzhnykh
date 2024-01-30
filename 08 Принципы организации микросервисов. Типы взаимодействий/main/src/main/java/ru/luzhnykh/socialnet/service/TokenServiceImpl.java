@@ -1,6 +1,9 @@
 package ru.luzhnykh.socialnet.service;
 
-import org.springframework.stereotype.Controller;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import ru.luzhnykh.socialnet.dao.TokenDao;
+import ru.luzhnykh.socialnet.dto.TokenDto;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,8 +11,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Реализация сервиса токенов. Выдает и валидирует токены
  */
-@Controller
+@Service
+@RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
+    private final TokenDao tokenDao;
     private final ConcurrentHashMap<String, String> tokens = new ConcurrentHashMap<>();
 
     /**
@@ -19,6 +24,7 @@ public class TokenServiceImpl implements TokenService {
     public String generate() {
         String token = UUID.randomUUID().toString();
         tokens.put(token, token);
+        tokenDao.add(new TokenDto(token));
         return token;
     }
 

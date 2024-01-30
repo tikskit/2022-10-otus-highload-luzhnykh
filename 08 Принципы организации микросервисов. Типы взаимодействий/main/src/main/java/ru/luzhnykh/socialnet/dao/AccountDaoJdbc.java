@@ -13,7 +13,6 @@ import java.sql.SQLException;
 @Repository
 @RequiredArgsConstructor
 public class AccountDaoJdbc implements AccountDao {
-
     private final JdbcOperations jdbc;
 
     @Override
