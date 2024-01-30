@@ -3,8 +3,11 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/soc_net
-    username: dbuser
+    username: postgres
     password: pass
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
 
 logging:
   level:
