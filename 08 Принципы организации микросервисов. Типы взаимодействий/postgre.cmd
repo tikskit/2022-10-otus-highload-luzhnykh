@@ -1,1 +1,1 @@
-docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=dbuser -e POSTGRES_DB=soc_net postgres:16
+docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16

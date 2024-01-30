@@ -15,6 +15,7 @@ public class DialogController {
     public ResponseEntity<String> send(@PathVariable String user_id, @RequestBody String text, @RequestHeader String token) {
         if (tokenService.validate(token)) {
 //            return ResponseEntity.ok(userService.search(firstName, lastName));
+            return ResponseEntity.ok("ok");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

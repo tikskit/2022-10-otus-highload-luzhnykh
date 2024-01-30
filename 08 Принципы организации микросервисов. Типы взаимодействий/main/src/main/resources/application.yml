@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/soc_net
-    username: dbuser
+    username: postgres
     password: pass
   liquibase:
     enabled: true
