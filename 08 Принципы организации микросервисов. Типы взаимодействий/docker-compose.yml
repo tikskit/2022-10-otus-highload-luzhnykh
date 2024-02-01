@@ -1,0 +1,44 @@
+version: '3'
+
+networks:
+  net08:
+    driver: bridge
+
+services:
+  main: 
+    build:
+      context: .\main
+      dockerfile: Dockerfile
+    container_name: main
+    ports:
+      - "18080:8080"
+    networks:
+      - net08
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - DIALOGS_ADDRESS=http://localhost:18081
+  dialogs:
+    build:
+      context: .\dialogs
+      dockerfile: Dockerfile
+    container_name: dialogs
+    ports:
+      - "18081:8081"
+    networks:
+      - net08
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+  pg:
+    image: postgres:16
+    ports:
+      - "15432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net08

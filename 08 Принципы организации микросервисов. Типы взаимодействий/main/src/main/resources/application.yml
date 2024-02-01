@@ -2,13 +2,14 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/soc_net
-    username: postgres
-    password: pass
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/soc_net}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:pass}
   liquibase:
     enabled: true
     change-log: classpath:db/changelog/db.changelog-master.xml
-
+dialogs:
+  address: ${DIALOGS_ADDRESS:http://localhost:8081}
 logging:
   level:
     ru.luzhnykh: DEBUG
