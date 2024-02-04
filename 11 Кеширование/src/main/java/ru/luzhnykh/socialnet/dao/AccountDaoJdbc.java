@@ -14,18 +14,16 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public class AccountDaoJdbc implements AccountDao {
 
-    private final JdbcOperations jdbcReader;
-    private final JdbcOperations jdbcWriter;
-
+    private final JdbcOperations jdbc;
     @Override
     public void addAccount(AccountDto account) {
-        jdbcWriter.update("insert into socnet.accounts(userid, passhash) values(?, ?)", account.userId(), account.passHash());
+        jdbc.update("insert into socnet.accounts(userid, passhash) values(?, ?)", account.userId(), account.passHash());
     }
 
     @Override
     public boolean match(AccountDto account) {
         try {
-            jdbcReader.queryForObject("select userid, passhash from socnet.accounts where userid=? and passhash=?",
+            jdbc.queryForObject("select userid, passhash from socnet.accounts where userid=? and passhash=?",
                     new AccountMapper(), account.userId(), account.passHash());
             return true;
         } catch (IncorrectResultSizeDataAccessException e) {

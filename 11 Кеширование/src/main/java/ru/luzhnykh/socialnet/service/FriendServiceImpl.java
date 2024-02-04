@@ -1,12 +1,17 @@
 package ru.luzhnykh.socialnet.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.luzhnykh.socialnet.dao.FriendDao;
 
 /**
  * Реализация сущности Друг
  */
 @Service
+@RequiredArgsConstructor
 public class FriendServiceImpl implements FriendService {
+
+    private final FriendDao friendDao;
 
     /**
      * Добавить друга
@@ -16,7 +21,7 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public void addFriend(String userId, String friendUserId) {
-
+        friendDao.add(userId, friendUserId);
     }
 
     /**
@@ -27,6 +32,6 @@ public class FriendServiceImpl implements FriendService {
      */
     @Override
     public void delFriend(String userId, String friendUserId) {
-
+        friendDao.delete(userId, friendUserId);
     }
 }

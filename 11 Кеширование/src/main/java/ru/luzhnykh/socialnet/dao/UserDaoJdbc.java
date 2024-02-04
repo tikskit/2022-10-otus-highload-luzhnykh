@@ -18,8 +18,7 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class UserDaoJdbc implements UserDao {
-    private final JdbcOperations jdbcReader;
-    private final JdbcOperations jdbcWriter;
+    private final JdbcOperations jdbc;
 
     /**
      * Добавить пользователя
@@ -28,7 +27,7 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public void addUser(UserDto user) {
-        jdbcWriter.update("insert into socnet.users(userid, firstname, lastname, dob, biography, city) values(?, ?, ?, ?, ?, ?)",
+        jdbc.update("insert into socnet.users(userid, firstname, lastname, dob, biography, city) values(?, ?, ?, ?, ?, ?)",
                 user.id(), user.first_name(), user.second_name(), user.birthdate(), user.biography(), user.city());
     }
 
@@ -42,7 +41,7 @@ public class UserDaoJdbc implements UserDao {
     public Optional<UserDto> getUser(String id) {
         try {
             return Optional.ofNullable(
-                    jdbcReader.queryForObject("select userid, firstname, lastname, dob, biography, city from socnet.users where userid=?",
+                    jdbc.queryForObject("select userid, firstname, lastname, dob, biography, city from socnet.users where userid=?",
                             new UserMapper(), id)
             );
         } catch (IncorrectResultSizeDataAccessException e) {
@@ -77,7 +76,7 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public List<UserDto> search(String firstName, String lastName) {
-        return jdbcReader.query(
+        return jdbc.query(
                 "select userid, firstname, lastname, dob, biography, city from socnet.users where firstname like ? and lastname like ? order by userid",
                 new UserMapper(), firstName + '%', lastName + '%');
     }
