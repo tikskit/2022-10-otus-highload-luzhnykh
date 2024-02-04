@@ -1,6 +1,6 @@
 package ru.luzhnykh.socialnet.dao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,15 +16,10 @@ import java.util.Optional;
  * Реализация UserDao на Jdbc
  */
 @Repository
+@RequiredArgsConstructor
 public class UserDaoJdbc implements UserDao {
     private final JdbcOperations jdbcReader;
     private final JdbcOperations jdbcWriter;
-
-    public UserDaoJdbc(@Qualifier("slaveJdbcOperations") JdbcOperations jdbcReader,
-                       @Qualifier("masterJdbcOperations") JdbcOperations jdbcWriter) {
-        this.jdbcReader = jdbcReader;
-        this.jdbcWriter = jdbcWriter;
-    }
 
     /**
      * Добавить пользователя

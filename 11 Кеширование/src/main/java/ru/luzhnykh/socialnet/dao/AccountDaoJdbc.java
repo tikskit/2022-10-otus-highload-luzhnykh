@@ -1,6 +1,6 @@
 package ru.luzhnykh.socialnet.dao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,16 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
+@RequiredArgsConstructor
 public class AccountDaoJdbc implements AccountDao {
 
     private final JdbcOperations jdbcReader;
     private final JdbcOperations jdbcWriter;
-
-    public AccountDaoJdbc(@Qualifier("slaveJdbcOperations") JdbcOperations jdbcReader,
-                       @Qualifier("masterJdbcOperations") JdbcOperations jdbcWriter) {
-        this.jdbcReader = jdbcReader;
-        this.jdbcWriter = jdbcWriter;
-    }
 
     @Override
     public void addAccount(AccountDto account) {
