@@ -16,7 +16,7 @@
         </preConditions>
         <createTable tableName="users" schemaName="socnet">
             <column name="userid" type="varchar(36)">
-<!--                <constraints primaryKey="true" primaryKeyName="pk_users"/>-->
+                <constraints primaryKey="true" primaryKeyName="pk_users"/>
             </column>
             <column name="firstname" type="varchar(50)">
                 <constraints nullable="false"/>

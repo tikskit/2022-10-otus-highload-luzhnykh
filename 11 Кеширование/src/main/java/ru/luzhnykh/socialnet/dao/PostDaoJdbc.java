@@ -9,6 +9,7 @@ import ru.luzhnykh.socialnet.dto.PostDto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PostDaoJdbc implements PostDao {
     private final JdbcOperations jdbc;
+
     @Override
     public void create(String postId, String authorUserId, String text) {
         jdbc.update("insert into socnet.posts(postid, authorid, text, postedat) values (?, ?, ?,now())", postId, authorUserId, text);
@@ -46,7 +48,23 @@ public class PostDaoJdbc implements PostDao {
             } else {
                 throw e;
             }
-        }    }
+        }
+    }
+
+    @Override
+    public List<PostDto> feed(String userId, Integer offset, Integer limit) {
+        return jdbc.query("""
+                select p.postid, p."text", p.authorid
+                from socnet.users u
+                inner join socnet.friends f on f.userid = u.userid
+                inner join socnet.posts p on p.authorid = f.friendid
+                where u.userid = ?
+                order by p.postedat, p.postid
+                offset ?
+                limit ?
+                """, new PostMapper(),
+                userId, offset, limit);
+    }
 
     private static class PostMapper implements RowMapper<PostDto> {
         @Override

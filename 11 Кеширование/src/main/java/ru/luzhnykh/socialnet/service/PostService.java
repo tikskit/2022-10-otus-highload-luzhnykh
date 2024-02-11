@@ -5,6 +5,7 @@ import ru.luzhnykh.socialnet.dto.CreatePostResDto;
 import ru.luzhnykh.socialnet.dto.PostDto;
 import ru.luzhnykh.socialnet.dto.UpdatePostDto;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -37,4 +38,14 @@ public interface PostService {
      * @return Dto сущности пост
      */
     Optional<PostDto> get(String id);
+
+    /**
+     * Получить ленту друзей пользователя
+     *
+     * @param userId ИД пользователя
+     * @param offset Оффсет постов друзей
+     * @param limit  Количество постов друзей
+     * @return Список постов друзей
+     */
+    List<PostDto> feed(String userId, Integer offset, Integer limit);
 }

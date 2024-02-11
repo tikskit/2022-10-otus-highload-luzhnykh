@@ -35,9 +35,19 @@
                 <indexExists tableName="posts" schemaName="socnet" columnNames="authorid,postedat"/>
             </not>
         </preConditions>
-        <createIndex tableName="posts" schemaName="socnet" indexName="ix_posts_authorid_postedat">
+        <createIndex tableName="posts" schemaName="socnet" indexName="ix_posts_authorid">
             <column name="authorid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="00003-posts" author="tikskit">
+        <preConditions>
+            <not>
+                <indexExists tableName="posts" schemaName="socnet" columnNames="postedat,postid"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="posts" schemaName="socnet" indexName="ix_posts_postedat_postid">
             <column name="postedat"/>
+            <column name="postid"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

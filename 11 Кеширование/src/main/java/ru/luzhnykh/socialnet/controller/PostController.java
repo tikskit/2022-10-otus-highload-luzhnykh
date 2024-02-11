@@ -12,6 +12,8 @@ import ru.luzhnykh.socialnet.exceptions.PostNotFoundException;
 import ru.luzhnykh.socialnet.service.PostService;
 import ru.luzhnykh.socialnet.service.TokenService;
 
+import java.util.List;
+
 /**
  * Контроллер сущности Пост
  */
@@ -58,6 +60,25 @@ public class PostController {
             return postService.get(id)
                     .map(ResponseEntity::ok)
                     .orElseThrow(() -> new PostNotFoundException(String.format("Пост '%s' не найден", id)));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @GetMapping("/post/feed/{userId}")
+    public ResponseEntity<List<PostDto>> feed(@PathVariable String userId,
+                                              @RequestParam(defaultValue = "0", required = false) Integer offset,
+                                              @RequestParam(defaultValue = "10", required = false) Integer limit,
+                                              @RequestHeader String token) {
+        if (offset < 0) {
+            throw new IllegalArgumentException(String.format("Недопустимое значение параметра offset = %s", offset));
+        }
+
+        if (limit < 1) {
+            throw new IllegalArgumentException(String.format("Недопустимое значение параметра limit = %s", limit));
+        }
+        if (tokenService.validate(token)) {
+            return ResponseEntity.ok(postService.feed(userId, offset, limit));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

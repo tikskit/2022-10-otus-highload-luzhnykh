@@ -8,6 +8,7 @@ import ru.luzhnykh.socialnet.dto.CreatePostResDto;
 import ru.luzhnykh.socialnet.dto.PostDto;
 import ru.luzhnykh.socialnet.dto.UpdatePostDto;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -40,5 +41,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Optional<PostDto> get(String id) {
         return postDao.get(id);
+    }
+
+    @Override
+    public List<PostDto> feed(String userId, Integer offset, Integer limit) {
+        return postDao.feed(userId, offset, limit);
     }
 }
