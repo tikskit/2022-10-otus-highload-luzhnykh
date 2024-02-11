@@ -68,13 +68,13 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "af8f6b8d-109a-44db-9786-f5ef67a2fe22",
+						"value": "d6671945-cfe6-41a2-8846-b60ed837d75e",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"user1\",\r\n    \"first_name\": \"firstName\",\r\n    \"second_name\": \"lastName\",\r\n    \"birthdate\": \"2001-05-07\",\r\n    \"sex\": 1,\r\n    \"biography\": \"none\",\r\n    \"city\": \"NY\"\r\n}",
+					"raw": "{\r\n    \"id\": \"user12\",\r\n    \"first_name\": \"firstName\",\r\n    \"second_name\": \"lastName\",\r\n    \"birthdate\": \"2001-05-07\",\r\n    \"sex\": 1,\r\n    \"biography\": \"none\",\r\n    \"city\": \"NY\",\r\n    \"password\": \"pass\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -82,54 +82,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/register",
+					"raw": "http://localhost:18080/user/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
-					"path": [
-						"user",
-						"register"
-					],
-					"query": [
-						{
-							"key": "token",
-							"value": "b86b794e-b4c0-4cff-9c03-7e9483e3897e",
-							"disabled": true
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/dialog/send",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "token",
-						"value": "af8f6b8d-109a-44db-9786-f5ef67a2fe22",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"id\": \"user1\",\r\n    \"first_name\": \"firstName\",\r\n    \"second_name\": \"lastName\",\r\n    \"birthdate\": \"2001-05-07\",\r\n    \"sex\": 1,\r\n    \"biography\": \"none\",\r\n    \"city\": \"NY\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/user/register",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
+					"port": "18080",
 					"path": [
 						"user",
 						"register"
@@ -152,7 +110,7 @@
 				"header": [
 					{
 						"key": "token",
-						"value": "6656cfb1-eeeb-4993-b5f3-b9b8b066bfa5",
+						"value": "d6671945-cfe6-41a2-8846-b60ed837d75e",
 						"type": "text"
 					}
 				],
@@ -166,7 +124,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:18080/dialog/810eb774-30a1-4003-8894-83c6a93af004/send",
+					"raw": "http://localhost:18080/dialog/a216d79c-345e-4ef8-ae80-c06c5f16b2b7/send",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -174,7 +132,133 @@
 					"port": "18080",
 					"path": [
 						"dialog",
-						"810eb774-30a1-4003-8894-83c6a93af004",
+						"a216d79c-345e-4ef8-ae80-c06c5f16b2b7",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/friend/set/{user_id}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "0d0180c0-564a-43fc-831a-415d622b5b6f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/set/45aaf307-cf29-468e-8d73-ed5b0aa48a1b?user_id=7f55b35f-141e-4130-b05a-3089007e1960",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"set",
+						"45aaf307-cf29-468e-8d73-ed5b0aa48a1b"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "7f55b35f-141e-4130-b05a-3089007e1960"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/friend/delete",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "0d0180c0-564a-43fc-831a-415d622b5b6f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/delete/45aaf307-cf29-468e-8d73-ed5b0aa48a1b?user_id=7f55b35f-141e-4130-b05a-3089007e1960",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"delete",
+						"45aaf307-cf29-468e-8d73-ed5b0aa48a1b"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "7f55b35f-141e-4130-b05a-3089007e1960"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/dialog/send from dialogs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "e43115d5-37a0-4ecc-bb90-bb15c4b900cf",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"привет!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/dialog/6d868e73-a2b9-4385-8a4e-eca89057641e/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"dialog",
+						"6d868e73-a2b9-4385-8a4e-eca89057641e",
 						"send"
 					],
 					"query": [
