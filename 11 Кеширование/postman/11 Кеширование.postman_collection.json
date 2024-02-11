@@ -114,6 +114,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/post/get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "1df4b2ce-2a1f-4ca9-aa52-d1285f6646a7",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/post/get/393a9b46-3f5c-49b5-a346-67e69c165923",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"post",
+								"get",
+								"393a9b46-3f5c-49b5-a346-67e69c165923"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

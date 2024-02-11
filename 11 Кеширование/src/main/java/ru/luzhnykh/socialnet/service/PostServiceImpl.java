@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import ru.luzhnykh.socialnet.dao.PostDao;
 import ru.luzhnykh.socialnet.dto.CreatePostDto;
 import ru.luzhnykh.socialnet.dto.CreatePostResDto;
+import ru.luzhnykh.socialnet.dto.PostDto;
 import ru.luzhnykh.socialnet.dto.UpdatePostDto;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -33,5 +35,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(String id) {
         postDao.delete(id);
+    }
+
+    @Override
+    public Optional<PostDto> get(String id) {
+        return postDao.get(id);
     }
 }

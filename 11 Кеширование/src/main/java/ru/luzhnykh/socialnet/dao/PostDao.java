@@ -1,5 +1,9 @@
 package ru.luzhnykh.socialnet.dao;
 
+import ru.luzhnykh.socialnet.dto.PostDto;
+
+import java.util.Optional;
+
 /**
  * Dao сущности поста
  */
@@ -27,4 +31,10 @@ public interface PostDao {
      * @param id ИД поста
      */
     void delete(String id);
+
+    /**
+     * Получить пост по ИД
+     * @param id ИД поста
+     */
+    Optional<PostDto> get(String id);
 }

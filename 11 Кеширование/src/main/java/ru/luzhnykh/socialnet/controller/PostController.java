@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.luzhnykh.socialnet.dto.CreatePostDto;
 import ru.luzhnykh.socialnet.dto.CreatePostResDto;
+import ru.luzhnykh.socialnet.dto.PostDto;
 import ru.luzhnykh.socialnet.dto.UpdatePostDto;
+import ru.luzhnykh.socialnet.exceptions.PostNotFoundException;
 import ru.luzhnykh.socialnet.service.PostService;
 import ru.luzhnykh.socialnet.service.TokenService;
 
@@ -44,6 +46,18 @@ public class PostController {
         if (tokenService.validate(token)) {
             postService.delete(id);
             return ResponseEntity.ok("Успешно удален пост");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+
+    @GetMapping("/post/get/{id}")
+    public ResponseEntity<PostDto> get(@PathVariable String id, @RequestHeader String token) {
+        if (tokenService.validate(token)) {
+            return postService.get(id)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new PostNotFoundException(String.format("Пост '%s' не найден", id)));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
