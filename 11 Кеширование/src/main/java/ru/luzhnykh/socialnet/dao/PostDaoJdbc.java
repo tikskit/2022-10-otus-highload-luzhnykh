@@ -13,12 +13,12 @@ public class PostDaoJdbc implements PostDao {
     private final JdbcOperations jdbc;
     @Override
     public void create(String postId, String authorUserId, String text) {
-        jdbc.update("insert into socnet.posts(postid, author_id, text) values (?, ?, ?)", postId, authorUserId, text);
+        jdbc.update("insert into socnet.posts(postid, authorid, text, postedat) values (?, ?, ?,now())", postId, authorUserId, text);
     }
 
     @Override
     public void update(String id, String text) {
-        jdbc.update("update socnet.posts set text=? where postid=?", text, id);
+        jdbc.update("update socnet.posts set text=?,postedat=now() where postid=?", text, id);
     }
 
     @Override
