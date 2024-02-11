@@ -12,3 +12,4 @@ spring:
 logging:
   level:
     ru.luzhnykh: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

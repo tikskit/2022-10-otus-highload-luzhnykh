@@ -43,7 +43,7 @@ services:
       - DB_URL=jdbc:postgresql://pg:5432/soc_net
       - DB_USER=postgres
       - DB_PASS=pass
-      - DIALOGS_ADDRESS=http://localhost:18081
+      - DIALOGS_ADDRESS=http://dialogs:8081
     depends_on:
       - dialogs
       - pg
