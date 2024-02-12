@@ -20,6 +20,7 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService {
 
     private final PostDao postDao;
+    private final FeedService feedService;
 
     @Override
     public CreatePostResDto add(CreatePostDto createPostDto) {
@@ -45,6 +46,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> feed(String userId, Integer offset, Integer limit) {
-        return postDao.feed(userId, offset, limit);
+        return feedService.getFeed(userId);
     }
 }

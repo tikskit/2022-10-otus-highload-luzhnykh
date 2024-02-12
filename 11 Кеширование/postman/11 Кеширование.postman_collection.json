@@ -141,6 +141,33 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/post/feed",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "6faca814-ff18-42cd-a782-86dfa27ace10",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/post/feed/45aaf307-cf29-468e-8d73-ed5b0aa48a1b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"post",
+								"feed",
+								"45aaf307-cf29-468e-8d73-ed5b0aa48a1b"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
