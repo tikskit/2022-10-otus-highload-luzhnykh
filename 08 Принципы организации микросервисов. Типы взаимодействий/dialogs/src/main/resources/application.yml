@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/soc_net}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:pass}
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+logging:
+  level:
+    ru.luzhnykh: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
