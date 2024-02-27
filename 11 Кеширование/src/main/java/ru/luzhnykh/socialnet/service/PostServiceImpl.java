@@ -45,7 +45,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> feed(String userId, Integer offset, Integer limit) {
+    public List<PostDto> getFeed(String userId, Integer offset, Integer limit) {
         return feedService.getFeed(userId);
     }
 }

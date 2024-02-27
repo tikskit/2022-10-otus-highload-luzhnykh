@@ -78,7 +78,7 @@ public class PostController {
             throw new IllegalArgumentException(String.format("Недопустимое значение параметра limit = %s", limit));
         }
         if (tokenService.validate(token)) {
-            return ResponseEntity.ok(postService.feed(userId, offset, limit));
+            return ResponseEntity.ok(postService.getFeed(userId, offset, limit));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

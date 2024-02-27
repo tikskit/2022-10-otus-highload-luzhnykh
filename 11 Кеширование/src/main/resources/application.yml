@@ -14,5 +14,4 @@ spring:
 logging:
   level:
     ROOT: INFO
-    ru.luzhnykh.socialnet.service: INFO
-    ru.luzhnykh.socialnet.controller: INFO
+    ru.luzhnykh.socialnet: DEBUG

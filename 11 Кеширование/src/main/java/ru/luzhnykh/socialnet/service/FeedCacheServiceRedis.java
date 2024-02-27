@@ -2,6 +2,7 @@ package ru.luzhnykh.socialnet.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.luzhnykh.socialnet.dao.FeedCacheDao;
 import ru.luzhnykh.socialnet.dto.PostDto;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FeedCacheServiceRedis implements FeedCacheService {
 
+    private final FeedCacheDao feedCacheDao;
 
     /**
      * Получть ленту пользователя из кэша
@@ -24,7 +26,8 @@ public class FeedCacheServiceRedis implements FeedCacheService {
      */
     @Override
     public Optional<List<PostDto>> get(String userId) {
-        return Optional.empty();
+        List<PostDto> feed = feedCacheDao.get(userId);
+        return feed != null ? Optional.of(feed) : Optional.empty();
     }
 
     /**
@@ -35,6 +38,6 @@ public class FeedCacheServiceRedis implements FeedCacheService {
      */
     @Override
     public void put(String userId, List<PostDto> feed) {
-
+        feedCacheDao.set(userId, feed);
     }
 }
