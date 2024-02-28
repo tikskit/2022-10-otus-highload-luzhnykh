@@ -1,5 +1,6 @@
 package ru.luzhnykh.socialnet.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -15,11 +16,16 @@ import java.util.List;
  */
 @Configuration
 public class RedisConfig {
+    @Value("${redis.host}")
+    private String host;
+    @Value("${redis.port}")
+    private Integer port;
+
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration rsc = new RedisStandaloneConfiguration();
-        rsc.setHostName("localhost");
-        rsc.setPort(6379);
+        rsc.setHostName(host);
+        rsc.setPort(port);
 
         LettuceConnectionFactory lcf = new LettuceConnectionFactory(rsc);
         lcf.afterPropertiesSet();

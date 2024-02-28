@@ -52,7 +52,7 @@ public class PostDaoJdbc implements PostDao {
     }
 
     @Override
-    public List<PostDto> feed(String userId, Integer offset, Integer limit) {
+    public List<PostDto> getFeed(String userId, Integer offset, Integer limit) {
         return jdbc.query("""
                 select p.postid, p."text", p.authorid
                 from socnet.users u

@@ -47,5 +47,5 @@ public interface PostDao {
      * @param limit  Количество постов друзей
      * @return Список постов друзей
      */
-    List<PostDto> feed(String userId, Integer offset, Integer limit);
+    List<PostDto> getFeed(String userId, Integer offset, Integer limit);
 }

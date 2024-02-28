@@ -41,7 +41,7 @@ public class FeedServiceImpl implements FeedService {
                 .orElseGet(
                         () -> {
                             log.debug("Мимо кэша: {}", userId);
-                            List<PostDto> feed = postDao.feed(userId, FEED_OFFSET, FEED_SIZE);
+                            List<PostDto> feed = postDao.getFeed(userId, FEED_OFFSET, FEED_SIZE);
                             /* Если feed ничего  не вернул в БД, то всё равно помещаем в кэш, чтобы не ддосили по промахам */
                             feedCacheService.put(userId, feed);
                             return feed;
