@@ -7,8 +7,9 @@ public interface DialogService {
     /**
      * Добавить диалог
      *
-     * @param userId ИД пользователя
-     * @param text   Текст диалога
+     * @param senderId   ИД пользователя
+     * @param receiverId ИД получателя
+     * @param text       Текст диалога
      */
-    void add(String userId, String text);
+    void add(String senderId, String receiverId, String text);
 }

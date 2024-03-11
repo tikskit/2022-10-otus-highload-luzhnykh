@@ -18,11 +18,13 @@ public class DialogController {
     private final DialogService dialogService;
 
     @PostMapping("/dialog/{user_id}/send")
-    public ResponseEntity<String> send(@PathVariable String user_id, @RequestBody DialogRequestDto text,
+    public ResponseEntity<String> send(@PathVariable("user_id") String receiverId,
+                                       @RequestBody DialogRequestDto text,
                                        @RequestHeader String token) {
         if (tokenService.validate(token)) {
-            dialogService.add(user_id, text.text());
-            log.info("Добавлен диалог от пользователя {}", user_id);
+            String senderId = tokenService.getUserFromToken(token);
+            dialogService.add(senderId, receiverId, text.text());
+            log.info("Добавлено сообщение от пользователя {} для пользователя {}", senderId, receiverId);
             return ResponseEntity.ok("ok");
         } else {
             log.warn("Пользователь не авторизован");

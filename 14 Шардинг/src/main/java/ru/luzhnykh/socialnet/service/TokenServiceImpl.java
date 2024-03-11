@@ -5,8 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import ru.luzhnykh.socialnet.dao.TokenDao;
 import ru.luzhnykh.socialnet.dto.TokenDto;
-
-import java.util.UUID;
+import ru.luzhnykh.socialnet.exceptions.InvalidTokenException;
 
 /**
  * Реализация сервиса токенов. Выдает и валидирует токены
@@ -19,10 +18,9 @@ public class TokenServiceImpl implements TokenService {
      * Сгенерировать новый токен
      */
     @Override
-    public String generate() {
-        String token = UUID.randomUUID().toString();
-        tokenDao.add(new TokenDto(token));
-        return token;
+    public String generate(String userId) {
+        tokenDao.add(new TokenDto(userId));
+        return userId;
     }
 
     /**
@@ -34,5 +32,18 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public boolean validate(String token) {
         return StringUtils.isNotBlank(token) && tokenDao.get(token).isPresent();
+    }
+
+    /**
+     * Извлекает ИД пользователя из токена
+     */
+    @Override
+    public String getUserFromToken(String token) {
+        //В нашем упрощенном примере токен это и есть ИД пользователя
+        if (StringUtils.isNotBlank(token)) {
+            return token;
+        } else {
+            throw new InvalidTokenException(String.format("Некорректный токен", token));
+        }
     }
 }

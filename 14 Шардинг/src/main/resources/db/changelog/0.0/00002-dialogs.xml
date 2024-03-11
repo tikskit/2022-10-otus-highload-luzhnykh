@@ -15,12 +15,33 @@
             </not>
         </preConditions>
         <createTable tableName="dialogs" schemaName="socnet">
-            <column name="userid" type="varchar(36)">
+            <column name="senderid" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="receiverid" type="varchar(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="text" type="varchar">
                 <constraints nullable="false"/>
             </column>
+            <column name="datetime" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+    </changeSet>
+    <changeSet id="00002-user" author="tikskit">
+        <preConditions>
+            <and>
+                <tableExists tableName="dialogs" schemaName="socnet"/>
+                <not>
+                    <indexExists tableName="dialogs" columnNames="senderid,receiverid,datetime"/>
+                </not>
+            </and>
+        </preConditions>
+        <createIndex tableName="dialogs" indexName="ix_dialogs_senderid_receiverid_datetime">
+            <column name="senderid"/>
+            <column name="receiverid"/>
+            <column name="datetime"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

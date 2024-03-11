@@ -26,7 +26,7 @@ public class UserDaoJdbc implements UserDao {
      */
     @Override
     public void addUser(UserDto user) {
-        jdbc.update("insert into socnet.users(userid, firstname, lastname, dob, biography, city) values(?, ?, ?, ?, ?, ?)",
+        jdbc.update("insert into socnet.users(senderId, firstname, lastname, dob, biography, city) values(?, ?, ?, ?, ?, ?)",
                 user.id(), user.first_name(), user.second_name(), user.birthdate(), user.biography(), user.city());
     }
 
@@ -40,7 +40,7 @@ public class UserDaoJdbc implements UserDao {
     public Optional<UserDto> getUser(String id) {
         try {
             return Optional.ofNullable(
-                    jdbc.queryForObject("select userid, firstname, lastname, dob, biography, city from socnet.users where userid=?",
+                    jdbc.queryForObject("select senderId, firstname, lastname, dob, biography, city from socnet.users where senderId=?",
                             new UserMapper(), id)
             );
         } catch (IncorrectResultSizeDataAccessException e) {
@@ -56,7 +56,7 @@ public class UserDaoJdbc implements UserDao {
         @Override
         public UserDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new UserDto(
-                    rs.getString("userid"),
+                    rs.getString("senderId"),
                     rs.getString("firstname"),
                     rs.getString("lastname"),
                     rs.getDate("dob").toLocalDate(),

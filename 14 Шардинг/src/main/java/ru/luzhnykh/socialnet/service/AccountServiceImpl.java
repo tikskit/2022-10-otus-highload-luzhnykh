@@ -33,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
     public Optional<String> login(LoginDto loginDto) {
         Objects.requireNonNull(loginDto);
         if (ROOT.equals(loginDto) || accountDao.match(convertLoginToAccount(loginDto))) {
-            return Optional.of(tokenService.generate());
+            return Optional.of(tokenService.generate(loginDto.id()));
         } else {
             return Optional.empty();
         }

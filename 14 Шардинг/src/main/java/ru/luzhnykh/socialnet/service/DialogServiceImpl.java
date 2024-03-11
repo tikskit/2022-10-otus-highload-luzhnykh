@@ -16,11 +16,12 @@ public class DialogServiceImpl implements DialogService {
     /**
      * Добавить диалог
      *
-     * @param userId ИД пользователя
-     * @param text   Текст диалога
+     * @param senderId   ИД пользователя
+     * @param receiverId ИД получателя
+     * @param text       Текст диалога
      */
     @Override
-    public void add(String userId, String text) {
-        dialogDao.add(new DialogDto(userId, text));
+    public void add(String senderId, String receiverId, String text) {
+        dialogDao.add(new DialogDto(senderId, receiverId, text));
     }
 }

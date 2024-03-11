@@ -7,7 +7,7 @@ public interface TokenService {
     /**
      * Сгенерировать новый токен
      */
-    String generate();
+    String generate(String userId);
 
     /**
      * Является ли токен валидным
@@ -16,4 +16,9 @@ public interface TokenService {
      * @return true если токен валидный, иначе false
      */
     boolean validate(String token);
+
+    /**
+     * Извлекает ИД пользователя из токена
+     */
+    String getUserFromToken(String token);
 }

@@ -2,8 +2,8 @@ package ru.luzhnykh.socialnet.dto;
 
 /**
  * Dto Диалог
- * @param userid ИД пользователя
+ * @param senderId ИД пользователя
  * @param text Текст
  */
-public record DialogDto(String userid, String text) {
+public record DialogDto(String senderId, String receiverId, String text) {
 }

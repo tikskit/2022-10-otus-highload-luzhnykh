@@ -19,6 +19,7 @@ public class DialogDaoJdbc implements DialogDao {
      */
     @Override
     public void add(DialogDto dialog) {
-        jdbc.update("insert into socnet.dialogs(userid, text) values(?, ?)", dialog.userid(), dialog.text());
+        jdbc.update("insert into socnet.dialogs(senderid, receiverid, text) values(?, ?, ?)", dialog.senderId(),
+                dialog.receiverId(), dialog.text());
     }
 }
