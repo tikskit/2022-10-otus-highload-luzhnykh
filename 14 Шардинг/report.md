@@ -61,18 +61,19 @@ senderid.
 
 # Настраиваем citus
 
+1. Сперва запускаем через docker-compose
 Запускаем:
 ```
 docker-compose -p citus up --scale worker=2 -d
 ```
 
-## Наполнение БД
+Далее вручную создаем схему и таблицы
 
-Подключимся по psql:
+2. Для этого подключимся по psql:
 ```
 docker exec -it citus_master psql -U postgres
 ```
-Создадим схему, таблицы:
+3. Создадим схему, таблицы:
 
 ```
 CREATE SCHEMA socnet;
@@ -82,14 +83,21 @@ CREATE TABLE socnet.users (userid VARCHAR(36) NOT NULL, firstname VARCHAR(50) NO
 CREATE TABLE socnet.accounts (userid VARCHAR(36) NOT NULL, passhash INTEGER NOT NULL, CONSTRAINT pk_account PRIMARY KEY (userid));
 CREATE TABLE socnet.tokens (token VARCHAR(36) NOT NULL, CONSTRAINT pk_token PRIMARY KEY (token));
 GRANT USAGE ON SCHEMA socnet TO postgres;
+
+insert into socnet.dialogs(senderid, receiverid, text, datetime) values('7f701cb4-71e3-421f-a83e-5d754ce3dd92', 'a50b3982-5ca6-409e-ad38-aeb783bf6e73', 'Привет, пойдешь гулять?', now());
+insert into socnet.dialogs(senderid, receiverid, text, datetime) values('a50b3982-5ca6-409e-ad38-aeb783bf6e73', '7f701cb4-71e3-421f-a83e-5d754ce3dd92', 'Привет, я ещё уроки не сделал', now());
+insert into socnet.dialogs(senderid, receiverid, text, datetime) values('7f701cb4-71e3-421f-a83e-5d754ce3dd92', 'a50b3982-5ca6-409e-ad38-aeb783bf6e73', 'Ок, а когда сделаешь?', now());
+insert into socnet.dialogs(senderid, receiverid, text, datetime) values('a50b3982-5ca6-409e-ad38-aeb783bf6e73', '7f701cb4-71e3-421f-a83e-5d754ce3dd92', 'Часа через два', now());
+
+insert into socnet.tokens(token) values('7f701cb4-71e3-421f-a83e-5d754ce3dd92');
 ```
 
-
-## Создаем распределенную таблицу диалогов
-
+4. Создаем распределенную таблицу диалогов
+```
 SELECT create_distributed_table('socnet.dialogs', 'senderid');
+```
 
-Наполним её данными:
+5. Наполним её данными:
 ```
 insert into socnet.dialogs(senderid, receiverid, text, datetime)
 select
@@ -99,3 +107,9 @@ gen_random_uuid(),
 TIMESTAMP with time zone '2023-01-01 00:00:00' + random() * (TIMESTAMP with time zone '2024-02-20 23:59:59' - TIMESTAMP with time zone '2023-01-01 00:00:00')
 FROM generate_series(100,(100 + random() * 100000)::int);
 ```
+
+6. Теперь можно получить диалоги между двумя пользоваетялми
+
+curl --location 'http://localhost:8080/dialog/a50b3982-5ca6-409e-ad38-aeb783bf6e73/list' \
+--header 'token: 7f701cb4-71e3-421f-a83e-5d754ce3dd92'
+
