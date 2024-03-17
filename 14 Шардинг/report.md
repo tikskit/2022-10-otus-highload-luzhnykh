@@ -1,3 +1,4 @@
+# Выбираем ключи шардирования
 Для хранения диалогов будет использоваться таблица:
 ```
 create table dialogs(
@@ -50,10 +51,51 @@ order by datetime;
 Для горизонтального масштабирования первые два запроса подходят лучше, потому что позвоняют шардироваться по одному ключу 
 senderid.
 Тогда у нас все сообщения одного пользователя оказываются на одном шарде. И это, вроде, нормально, даже в случае с celebrity:
-им пишут многие, но отвечают они как обычные пользователи или меньше. Таким образом это не приведет перекосу данных
+им пишут многие, но пишут сами/отвечают они как обычные пользователи или меньше. Таким образом это не приведет перекосу данных
 на какому-то одном шарде, а все сообщения будут размазаны по всем шардам равномерно.
 
 Недостатком такого подхода является то, что диалоги придется склеивать в приложении, выполняя сортировку сообщений в памяти.
 Кроме того, он не позволяет на уровне запроса выполнять пагинацию сообщений, а такая
 функция точно нужна. Поэтому придется реализовывать пагинацию тоже в коде приложения, а не в запросах.
 Эти операции увеличат нагрузку на CPU и память. При необходимости можно увеличивать количество инстансов приложения.
+
+# Настраиваем citus
+
+Запускаем:
+```
+docker-compose -p citus up --scale worker=2 -d
+```
+
+## Наполнение БД
+
+Подключимся по psql:
+```
+docker exec -it citus_master psql -U postgres
+```
+Создадим схему, таблицы:
+
+```
+CREATE SCHEMA socnet;
+CREATE TABLE socnet.dialogs (senderid VARCHAR(36) NOT NULL, receiverid VARCHAR(36) NOT NULL, text VARCHAR NOT NULL, datetime TIMESTAMP with time zone NOT NULL);
+CREATE INDEX ix_dialogs_senderid_receiverid_datetime ON socnet.dialogs(senderid, receiverid, datetime);
+CREATE TABLE socnet.users (userid VARCHAR(36) NOT NULL, firstname VARCHAR(50) NOT NULL, lastname VARCHAR(50) NOT NULL, dob date NOT NULL, biography VARCHAR, city VARCHAR(50), CONSTRAINT pk_users PRIMARY KEY (userid));
+CREATE TABLE socnet.accounts (userid VARCHAR(36) NOT NULL, passhash INTEGER NOT NULL, CONSTRAINT pk_account PRIMARY KEY (userid));
+CREATE TABLE socnet.tokens (token VARCHAR(36) NOT NULL, CONSTRAINT pk_token PRIMARY KEY (token));
+GRANT USAGE ON SCHEMA socnet TO postgres;
+```
+
+
+## Создаем распределенную таблицу диалогов
+
+SELECT create_distributed_table('socnet.dialogs', 'senderid');
+
+Наполним её данными:
+```
+insert into socnet.dialogs(senderid, receiverid, text, datetime)
+select
+gen_random_uuid(),
+gen_random_uuid(),
+'text-1-' || generate_series,
+TIMESTAMP with time zone '2023-01-01 00:00:00' + random() * (TIMESTAMP with time zone '2024-02-20 23:59:59' - TIMESTAMP with time zone '2023-01-01 00:00:00')
+FROM generate_series(100,(100 + random() * 100000)::int);
+```
