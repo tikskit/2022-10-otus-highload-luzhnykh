@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  net11:
+    driver: bridge
+
+services:
+  pg:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net11
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - net11
+  app: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8080:8080"
+    networks:
+      - net11
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - pg
+      - redis
