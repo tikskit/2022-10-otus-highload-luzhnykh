@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>ru.luzhnykh</groupId>
 	<artifactId>socialnet</artifactId>
-	<version>11.0.1-SNAPSHOT</version>
+	<version>17.0.1-SNAPSHOT</version>
 	<name>socialnet</name>
 	<description>Social network homework</description>
 	<properties>
@@ -47,10 +47,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 	</dependencies>
 

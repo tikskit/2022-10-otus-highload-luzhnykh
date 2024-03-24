@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  net11:
+  net17:
     driver: bridge
 
 services:
@@ -14,13 +14,12 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=soc_net
     networks:
-      - net11
-  redis:
-    image: redis:latest
-    ports:
-      - "6379:6379"
-    networks:
-      - net11
+      - net17
+    volumes:
+      - F:\OTUS\HighLoad\db\hw17\socnet:/var/lib/postgresql/data
+    command:
+       -c shared_preload_libraries=pg_stat_statements 
+       -c pg_stat_statements.track=all
   app: 
     build:
       context: .
@@ -29,13 +28,10 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - net11
+      - net17
     environment:
       - DB_URL=jdbc:postgresql://pg:5432/soc_net
       - DB_USER=postgres
       - DB_PASS=pass
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - pg
-      - redis

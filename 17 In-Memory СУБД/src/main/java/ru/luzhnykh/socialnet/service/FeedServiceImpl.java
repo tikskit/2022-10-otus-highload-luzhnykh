@@ -20,7 +20,6 @@ public class FeedServiceImpl implements FeedService {
     private static final Integer FEED_OFFSET = 0;
     // Количество постов в ленте по умолчанию
     private static final Integer FEED_SIZE = 1000;
-    private final FeedCacheService feedCacheService;
     private final PostDao postDao;
 
     /**
@@ -31,21 +30,6 @@ public class FeedServiceImpl implements FeedService {
      */
     @Override
     public List<PostDto> getFeed(String userId) {
-        return feedCacheService.get(userId)
-                .map(
-                        f -> {
-                            log.debug("Попадание в кэш: {}", userId);
-                            return f;
-                        }
-                )
-                .orElseGet(
-                        () -> {
-                            log.debug("Мимо кэша: {}", userId);
-                            List<PostDto> feed = postDao.getFeed(userId, FEED_OFFSET, FEED_SIZE);
-                            /* Если feed ничего  не вернул в БД, то всё равно помещаем в кэш, чтобы не ддосили по промахам */
-                            feedCacheService.put(userId, feed);
-                            return feed;
-                        }
-                );
+        return postDao.getFeed(userId, FEED_OFFSET, FEED_SIZE);
     }
 }
