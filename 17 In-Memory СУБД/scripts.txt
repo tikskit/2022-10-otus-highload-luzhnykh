@@ -1,11 +1,11 @@
 
 docker network create some-network
 
-docker run -p "6379:6379" --network some-network --name some-redis -d redis
-docker run -p "6379:6379" --name some-redis -d redis
-
-docker run -it --network some-network --rm redis redis-cli -h some-redis
-
 
 docker pull tarantool/tarantool
 docker run -it --rm tarantool/tarantool
+
+docker run -it --rm -e TARANTOOL_USER_NAME=user -e TARANTOOL_USER_PASSWORD=pass tarantool/tarantool
+
+
+docker exec -t -i 17in-memory-tarantool-1 console

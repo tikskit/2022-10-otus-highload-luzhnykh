@@ -13,5 +13,11 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
 logging:
   level:
-    ROOT: INFO
+    ROOT: DEBUG
     ru.luzhnykh.socialnet: DEBUG
+
+tarantool:
+  host: ${TARANTOOL-HOST:localhost}
+  port: ${TARANTOOL-PORT:3301}
+  username: ${TARANTOOL-USERNAME:user}
+  password: ${TARANTOOL-PASSWORD:pass}

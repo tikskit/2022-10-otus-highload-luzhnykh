@@ -20,6 +20,15 @@ services:
     command:
        -c shared_preload_libraries=pg_stat_statements 
        -c pg_stat_statements.track=all
+  tarantool:
+    image: tarantool/tarantool:latest
+    ports:
+      - "3301:3301"
+    networks:
+      - net17
+    environment:
+      - TARANTOOL_USER_NAME=user
+      - TARANTOOL_USER_PASSWORD=pass
   app: 
     build:
       context: .
@@ -33,5 +42,10 @@ services:
       - DB_URL=jdbc:postgresql://pg:5432/soc_net
       - DB_USER=postgres
       - DB_PASS=pass
+      - TARANTOOL-HOST=tarantool
+      - TARANTOOL-PORT=3301
+      - TARANTOOL-USERNAME=user
+      - TARANTOOL-PASSWORD=pass
     depends_on:
       - pg
+      - tarantool
