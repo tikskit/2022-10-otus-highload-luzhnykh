@@ -6,9 +6,7 @@ import ru.luzhnykh.socialnet.dao.PostDao;
 import ru.luzhnykh.socialnet.dto.CreatePostDto;
 import ru.luzhnykh.socialnet.dto.CreatePostResDto;
 import ru.luzhnykh.socialnet.dto.PostDto;
-import ru.luzhnykh.socialnet.dto.UpdatePostDto;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,7 +18,6 @@ import java.util.UUID;
 public class PostServiceImpl implements PostService {
 
     private final PostDao postDao;
-    private final FeedService feedService;
 
     @Override
     public CreatePostResDto add(CreatePostDto createPostDto) {
@@ -30,22 +27,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void update(UpdatePostDto updatePostDto) {
-        postDao.update(updatePostDto.id(), updatePostDto.text());
-    }
-
-    @Override
-    public void delete(String id) {
-        postDao.delete(id);
-    }
-
-    @Override
     public Optional<PostDto> get(String id) {
         return postDao.get(id);
     }
 
-    @Override
-    public List<PostDto> getFeed(String userId, Integer offset, Integer limit) {
-        return feedService.getFeed(userId);
-    }
 }
