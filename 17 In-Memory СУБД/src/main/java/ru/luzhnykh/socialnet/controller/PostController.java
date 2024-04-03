@@ -59,7 +59,7 @@ public class PostController {
         if (tokenService.validate(token)) {
             return postService.get(id)
                     .map(ResponseEntity::ok)
-                    .orElseThrow(() -> new PostNotFoundException(String.format("Пост '%s' не найден", id)));
+                    .orElse(ResponseEntity.notFound().build());
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

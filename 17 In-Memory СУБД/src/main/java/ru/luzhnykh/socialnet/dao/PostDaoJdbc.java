@@ -2,6 +2,7 @@ package ru.luzhnykh.socialnet.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -41,11 +42,12 @@ public class PostDaoJdbc implements PostDao {
 
     @Override
     public Optional<PostDto> get(String id) {
-        Optional<Post> byPostId = postRepository.findByPostId(id);
-        return byPostId
-                .map(
-                        p -> new PostDto(p.getPostId(), p.getText(), p.getAuthorId())
-                );
+        try {
+            Post post = postRepository.findByPostId(id);
+            return Optional.of(new PostDto(post.getPostId(), post.getText(), post.getAuthorId()));
+        } catch (DataAccessException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

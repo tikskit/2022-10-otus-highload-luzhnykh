@@ -8,7 +8,7 @@ box.space.posts:format({
                    })
 
 box.space.posts:create_index('primary', {unique = true, parts = {1, 'string'}, if_not_exists = true})
-box.space.posts:create_index('ix_authorid', {unique = false, parts = {2, 'string'}, if_not_exists = true})
+-- box.space.posts:create_index('ix_authorid', {unique = false, parts = {2, 'string'}, if_not_exists = true})
 
 -- Добавить пост
 function insert_post(postid, authorid, text)
@@ -17,6 +17,6 @@ function insert_post(postid, authorid, text)
 end
 -- Получить пост по ИД
 function get_post_by_id(postid)
-    return box.space.posts:select(postid)
+    return box.space.posts.index.primary:select(postid)
 end
 
