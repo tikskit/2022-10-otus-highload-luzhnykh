@@ -1,0 +1,53 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="00001-posts" author="tikskit">
+        <preConditions>
+            <not>
+                <tableExists tableName="posts" schemaName="socnet"/>
+            </not>
+        </preConditions>
+        <createTable tableName="posts" schemaName="socnet">
+            <column name="postid" type="varchar(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_posts"/>
+            </column>
+            <column name="authorid" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="text" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="postedat" type="timestamp with time zone">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="00002-posts" author="tikskit">
+        <preConditions>
+            <not>
+                <indexExists tableName="posts" schemaName="socnet" columnNames="authorid,postedat"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="posts" schemaName="socnet" indexName="ix_posts_authorid">
+            <column name="authorid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="00003-posts" author="tikskit">
+        <preConditions>
+            <not>
+                <indexExists tableName="posts" schemaName="socnet" columnNames="postedat,postid"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="posts" schemaName="socnet" indexName="ix_posts_postedat_postid">
+            <column name="postedat"/>
+            <column name="postid"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

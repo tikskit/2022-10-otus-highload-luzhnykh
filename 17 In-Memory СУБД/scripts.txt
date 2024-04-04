@@ -1,0 +1,14 @@
+
+docker network create some-network
+
+
+docker pull tarantool/tarantool
+docker run -it --rm tarantool/tarantool
+
+docker run -it --rm -e TARANTOOL_USER_NAME=user -e TARANTOOL_USER_PASSWORD=pass tarantool/tarantool
+
+docker exec -it 17in-memory-tarantool-1 console
+
+
+docker exec -t -i 17in-memory-tarantool-1 console box.space.posts.index.primary:select()
+docker exec -it tarantool/tarantool -e TARANTOOL_USER_NAME=user -e TARANTOOL_USER_PASSWORD=pass

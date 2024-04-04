@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/soc_net}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:pass}
+  hikari:
+#      register-mbeans: true
+    maximumPoolSize: 70
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+logging:
+  level:
+    ROOT: DEBUG
+    ru.luzhnykh.socialnet: DEBUG
+
+tarantool:
+  host: ${TARANTOOL-HOST:localhost}
+  port: ${TARANTOOL-PORT:3301}
+  username: ${TARANTOOL-USERNAME:user}
+  password: ${TARANTOOL-PASSWORD:pass}

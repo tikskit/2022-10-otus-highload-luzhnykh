@@ -1,0 +1,51 @@
+version: '3'
+
+networks:
+  net17:
+    driver: bridge
+
+services:
+  pg:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net17
+    volumes:
+      - F:\OTUS\HighLoad\db\hw17\socnet:/var/lib/postgresql/data
+    command:
+       -c shared_preload_libraries=pg_stat_statements 
+       -c pg_stat_statements.track=all
+  tarantool:
+    image: tarantool/tarantool:latest
+    ports:
+      - "3301:3301"
+    networks:
+      - net17
+    environment:
+      - TARANTOOL_USER_NAME=user
+      - TARANTOOL_USER_PASSWORD=pass
+  app: 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app
+    ports:
+      - "8080:8080"
+    networks:
+      - net17
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - TARANTOOL-HOST=tarantool
+      - TARANTOOL-PORT=3301
+      - TARANTOOL-USERNAME=user
+      - TARANTOOL-PASSWORD=pass
+    depends_on:
+      - pg
+      - tarantool
