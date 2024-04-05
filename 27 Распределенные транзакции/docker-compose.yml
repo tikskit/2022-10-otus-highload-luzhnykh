@@ -51,3 +51,21 @@ services:
     user: root
     networks:
       - net27
+  resources:
+    build:
+      context: .\resources
+      dockerfile: Dockerfile
+    container_name: resources
+    ports:
+      - "8080:8080"
+    networks:
+      - net27
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
+    depends_on:
+      - pg
+      - kafka
+      - zookeeper

@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: resources
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:29092}
