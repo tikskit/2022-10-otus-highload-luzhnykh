@@ -8,4 +8,5 @@ import ru.luzhnykh.distribtx.resources.dto.DoctorRequestResponseDto;
  */
 public interface DoctorRequestService {
     void addRequest(DoctorRequestDto requestDto);
+    void cancelRequest(DoctorRequestDto requestDto);
 }

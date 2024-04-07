@@ -4,7 +4,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.stereotype.Repository;
-import ru.luzhnykh.distribtx.resources.dto.DoctorRequestDto;
+import ru.luzhnykh.distribtx.resources.domain.DoctorRequest;
 import ru.luzhnykh.distribtx.resources.enums.DoctorRequestState;
 
 /**
@@ -17,17 +17,17 @@ public class DoctorRequestDaoJdbc implements DoctorRequestDao {
     private final JdbcOperations jdbc;
 
     @Override
-    public void addRequest(DoctorRequestDto requestDto) {
+    public void addRequest(DoctorRequest request) {
         jdbc.update("""
                         insert into resources.doctor_requests(requestid, doctorid, prescriptionid, \"start\", \"end\", state)
                         values(?, ?, ?, ?, ?, ?)
                         """,
-                requestDto.requestId(), requestDto.doctorId(), requestDto.prescriptionId(), requestDto.start(),
-                requestDto.end(), DoctorRequestState.ARRANGED.name());
+                request.requestId(), request.doctorId(), request.prescriptionId(), request.start(),
+                request.end(), DoctorRequestState.ARRANGED.name());
     }
 
     @Override
-    public boolean activeExist(@NonNull DoctorRequestDto requestDto) {
+    public boolean activeExist(@NonNull DoctorRequest request) {
         return Boolean.TRUE.equals(
                 jdbc.queryForObject("""
                                 select exists(
@@ -39,7 +39,19 @@ public class DoctorRequestDaoJdbc implements DoctorRequestDao {
                                                     and r.state = ?
                                 ) as ex
                                 """,
-                        Boolean.class, requestDto.doctorId(), requestDto.start(), requestDto.end(), DoctorRequestState.ARRANGED.name())
+                        Boolean.class, request.doctorId(), request.start(), request.end(), DoctorRequestState.ARRANGED.name())
+        );
+    }
+
+    @Override
+    public void cancelRequest(DoctorRequest request) {
+        jdbc.update(
+                """
+                        update resources.doctor_requests
+                        set state = ?
+                        where requestid = ?
+                        """,
+                DoctorRequestState.CANCELLED.name(), request.requestId()
         );
     }
 }
