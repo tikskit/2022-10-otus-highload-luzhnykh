@@ -1,0 +1,51 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+    <changeSet id="00001-doctor-requests" author="tikskit">
+        <preConditions>
+            <not>
+                <tableExists tableName="doctor_requests" schemaName="resources"/>
+            </not>
+        </preConditions>
+        <createTable tableName="doctor_requests" schemaName="resources">
+            <column name="requestid" type="varchar(36)">
+                <constraints primaryKey="true" primaryKeyName="pk_doctor_requests"/>
+            </column>
+            <column name="doctorid" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="prescriptionid" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="state" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="00002-unique-index" author="tikskit">
+        <preConditions>
+            <not>
+                <indexExists tableName="doctor_requests" schemaName="resources" columnNames="doctorid,start,end"/>
+            </not>
+        </preConditions>
+        <createIndex tableName="doctor_requests" indexName="ix_doctorid_start_end" schemaName="resources">
+            <column name="doctorid"/>
+            <column name="start"/>
+            <column name="end"/>
+            <column name="state"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

@@ -12,11 +12,11 @@ services:
     environment:
       - POSTGRES_PASSWORD=pass
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=soc_net
+      - POSTGRES_DB=hosp
     networks:
       - net27
     volumes:
-      - F:\OTUS\HighLoad\db\hw27\socnet\pg:/var/lib/postgresql/data
+      - F:\OTUS\HighLoad\db\hw27\hosp\pg:/var/lib/postgresql/data
     command:
        -c shared_preload_libraries=pg_stat_statements 
        -c pg_stat_statements.track=all
@@ -28,8 +28,8 @@ services:
     ports:
       - 22181:2181
     volumes:
-      - F:\OTUS\HighLoad\db\hw27\socnet\zookeeper\data:/var/lib/zookeeper/data
-      - F:\OTUS\HighLoad\db\hw27\socnet\zookeeper\log:/var/lib/zookeeper/log
+      - F:\OTUS\HighLoad\db\hw27\hosp\zookeeper\data:/var/lib/zookeeper/data
+      - F:\OTUS\HighLoad\db\hw27\hosp\zookeeper\log:/var/lib/zookeeper/log
     user: root
     networks:
       - net27
@@ -47,7 +47,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
-      - F:\OTUS\HighLoad\db\hw27\socnet\kafka\data:/var/lib/kafka/data
+      - F:\OTUS\HighLoad\db\hw27\hosp\kafka\data:/var/lib/kafka/data
     user: root
     networks:
       - net27
@@ -61,7 +61,7 @@ services:
     networks:
       - net27
     environment:
-      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_URL=jdbc:postgresql://pg:5432/hosp
       - DB_USER=postgres
       - DB_PASS=pass
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
