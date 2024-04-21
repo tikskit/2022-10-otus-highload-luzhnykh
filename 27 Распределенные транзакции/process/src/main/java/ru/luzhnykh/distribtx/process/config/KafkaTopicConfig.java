@@ -1,4 +1,4 @@
-package ru.luzhnykh.distribtx.resources.config;
+package ru.luzhnykh.distribtx.process.config;
 
 import org.apache.kafka.clients.admin.AdminClientConfig;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -20,6 +20,10 @@ public class KafkaTopicConfig {
         Map<String, Object> configs = new HashMap<>();
         configs.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         return new KafkaAdmin(configs);
+    }
+
+    public NewTopic surgeryArrangeRequest() {
+        return new NewTopic("surgery-arrange", 1, (short) 1);
     }
 
     @Bean

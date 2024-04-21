@@ -7,6 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.luzhnykh.distribtx.resources.dto.DoctorRequestResponseDto;
 
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -16,6 +17,6 @@ public class DoctorRequestReplyPublisher {
 
     public void publish(@NonNull DoctorRequestResponseDto responseDto) {
         kafkaTemplate.send(TOPIC, responseDto);
-        log.info("Send {}", responseDto);
+        log.info("Sent {}", responseDto);
     }
 }

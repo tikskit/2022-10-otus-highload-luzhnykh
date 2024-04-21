@@ -9,5 +9,5 @@ import java.time.LocalDate;
  * @param start дата начала операции
  * @param end дата окончания операции
  */
-public record SurgeryDto(String prescriptionId, String doctorId, LocalDate start, LocalDate end) {
+public record SurgeryArrangeDto(String prescriptionId, String doctorId, LocalDate start, LocalDate end) {
 }

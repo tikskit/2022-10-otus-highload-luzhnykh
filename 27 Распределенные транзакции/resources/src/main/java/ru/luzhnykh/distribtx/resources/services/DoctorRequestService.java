@@ -1,7 +1,7 @@
 package ru.luzhnykh.distribtx.resources.services;
 
+
 import ru.luzhnykh.distribtx.resources.dto.DoctorRequestDto;
-import ru.luzhnykh.distribtx.resources.dto.DoctorRequestResponseDto;
 
 /**
  * Сервис резервирования врачей

@@ -9,7 +9,7 @@
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="00001-resources-schema" author="tikskit">
         <sql dbms="postgresql, mssql, h2" endDelimiter=";">
-            CREATE SCHEMA resources
+            CREATE SCHEMA IF NOT EXISTS resources
         </sql>
     </changeSet>
 </databaseChangeLog>

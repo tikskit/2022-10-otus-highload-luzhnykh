@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import ru.luzhnykh.distribtx.resources.dao.DoctorRequestDao;
-import ru.luzhnykh.distribtx.resources.domain.DoctorRequest;
 import ru.luzhnykh.distribtx.resources.dto.DoctorRequestDto;
 import ru.luzhnykh.distribtx.resources.dto.DoctorRequestResponseDto;
+import ru.luzhnykh.distribtx.resources.dao.DoctorRequestDao;
+import ru.luzhnykh.distribtx.resources.domain.DoctorRequest;
 import ru.luzhnykh.distribtx.resources.enums.DoctorRequestRetCodes;
 import ru.luzhnykh.distribtx.resources.events.DoctorRequestReplyPublisher;
 import ru.luzhnykh.distribtx.resources.mapper.DoctorRequestMapper;
@@ -22,7 +22,7 @@ public class DoctorRequestServiceImpl implements DoctorRequestService {
 
     private static final Logger log = LoggerFactory.getLogger(DoctorRequestServiceImpl.class);
     private final DoctorRequestDao doctorRequestDao;
-    private final DoctorRequestReplyPublisher publisher;
+    private final DoctorRequestReplyPublisher replyPublisher;
     private final DoctorRequestMapper mapper;
 
     @Override
@@ -44,7 +44,7 @@ public class DoctorRequestServiceImpl implements DoctorRequestService {
             log.error("Ошибка при добавлении заявки", e);
         }
 
-        publisher.publish(responseDto);
+        replyPublisher.publish(responseDto);
     }
 
     @Override
@@ -61,6 +61,6 @@ public class DoctorRequestServiceImpl implements DoctorRequestService {
             log.error("Ошибка при отмене заявки", e);
         }
 
-        publisher.publish(responseDto);
+        replyPublisher.publish(responseDto);
     }
 }

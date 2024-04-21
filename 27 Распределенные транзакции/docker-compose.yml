@@ -57,6 +57,25 @@ services:
       dockerfile: Dockerfile
     container_name: resources
     ports:
+      - "8081:8081"
+    networks:
+      - net27
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/hosp
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - PORT=8081
+    depends_on:
+      - pg
+      - kafka
+      - zookeeper
+  process:
+    build:
+      context: .\process
+      dockerfile: Dockerfile
+    container_name: process
+    ports:
       - "8080:8080"
     networks:
       - net27
@@ -65,7 +84,9 @@ services:
       - DB_USER=postgres
       - DB_PASS=pass
       - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - PORT=8080
     depends_on:
       - pg
       - kafka
       - zookeeper
+      - resources
