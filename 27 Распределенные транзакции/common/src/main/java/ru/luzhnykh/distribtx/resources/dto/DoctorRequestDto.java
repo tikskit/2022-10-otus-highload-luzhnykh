@@ -1,4 +1,4 @@
-package ru.luzhnykh.distribtx.resources.dto;
+package ru.luzhnykh.distribtx.dto.resources;
 
 import java.time.LocalDate;
 
