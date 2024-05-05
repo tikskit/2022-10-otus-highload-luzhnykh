@@ -5,16 +5,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import ru.luzhnykh.distribtx.common.enums.DoctorRequestRetCodes;
+import ru.luzhnykh.distribtx.process.dto.StartProcessParamDto;
 import ru.luzhnykh.distribtx.process.dto.SurgeryArrangeDto;
-import ru.luzhnykh.distribtx.resources.dto.DoctorRequestResponseDto;
-import ru.luzhnykh.distribtx.resources.enums.Action;
+import ru.luzhnykh.distribtx.process.service.ProcessOrchestratorService;
+import ru.luzhnykh.distribtx.common.dto.DoctorRequestResponseDto;
+import ru.luzhnykh.distribtx.common.enums.Action;
 
 @Slf4j
-@Component
+@Service
 @RequiredArgsConstructor
 public class Subscriber {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+    private final ProcessOrchestratorService orchestrator;
+
+    @SneakyThrows
+    @KafkaListener(topics = "start-process")
+    public void startProcessListener(String payload) {
+        StartProcessParamDto param = objectMapper.readValue(payload, StartProcessParamDto.class);
+
+        log.info("Запуск процесса назначения операции: {}", param);
+        orchestrator.startProcess(param);
+    }
 
     @SneakyThrows
     @KafkaListener(topics = "surgery-arrange")
@@ -27,16 +40,7 @@ public class Subscriber {
     @KafkaListener(topics = "doctor-request-reply")
     public void doctorRequestReplyListener(String payload) {
         DoctorRequestResponseDto responseDto = objectMapper.readValue(payload, DoctorRequestResponseDto.class);
-        log.info("Действие {} запрос {}", responseDto.action(), payload);
-        Action act = Action.valueOf(responseDto.action());
-        switch (act) {
-            case Action.ARRANGE:
 
-                break;
-            case Action.CANCEL:
-                break;
-            default:
-        }
     }
 
 

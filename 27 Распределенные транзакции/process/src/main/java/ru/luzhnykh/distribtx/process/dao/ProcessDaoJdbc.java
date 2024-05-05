@@ -18,14 +18,14 @@ public class ProcessDaoJdbc implements ProcessDao {
     private final JdbcOperations jdbc;
 
     @Override
-    public Optional<Process> findById(String requestId) {
+    public Optional<Process> findById(String processId) {
         try {
             Process process = jdbc.queryForObject(
                     """
-                            select requestId, state, prescription_step, doctor_step, payment_step, notification_step 
-                            from processes.processes where requestId=?
+                            select processId, params, state, prescription_step, doctor_step, payment_step, notification_step 
+                            from processes.processes where processId=?
                             """,
-                    new ProcessMapper(), requestId);
+                    new ProcessMapper(), processId);
             return Optional.ofNullable(process);
         } catch (IncorrectResultSizeDataAccessException e) {
             if (e.getActualSize() == 0) {
@@ -40,7 +40,8 @@ public class ProcessDaoJdbc implements ProcessDao {
         @Override
         public Process mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Process(
-                    rs.getString("requestId"),
+                    rs.getString("processId"),
+                    rs.getString("params"),
                     rs.getString("state"),
                     rs.getString("prescription_step"),
                     rs.getString("doctor_step"),
@@ -54,16 +55,18 @@ public class ProcessDaoJdbc implements ProcessDao {
     public void update(Process process) {
         jdbc.update(
                 """
-                        update processes.processes
+                        insert into processes.processes(processId, params, state, prescription_step, doctor_step, payment_step, notification_step)
+                        values(?, ?, ?, ?, ?, ?, ?)
+                        on conflict(processId) do update
                         set
-                            state = ?,
-                            prescription_step = ?,
-                            doctor_step = ?,
-                            payment_step = ?,
-                            notification_step = ?
-                        where requestId=?
+                            state = excluded.state,
+                            params = excluded.params,
+                            prescription_step = excluded.prescription_step,
+                            doctor_step = excluded.doctor_step,
+                            payment_step = excluded.payment_step,
+                            notification_step = excluded.notification_step
                         """,
-                process.state(), process.prescriptionStep(), process.doctorStep(), process.paymentStep(),
-                process.notificationStep(), process.requestId());
+                process.processId(), process.params(), process.state(), process.prescriptionStep(), process.doctorStep(), process.paymentStep(),
+                process.notificationStep());
     }
 }

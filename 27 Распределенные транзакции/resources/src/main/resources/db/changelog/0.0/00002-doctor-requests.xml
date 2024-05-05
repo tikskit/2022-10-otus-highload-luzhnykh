@@ -15,7 +15,7 @@
             </not>
         </preConditions>
         <createTable tableName="doctor_requests" schemaName="resources">
-            <column name="requestid" type="varchar(36)">
+            <column name="processid" type="varchar(36)">
                 <constraints primaryKey="true" primaryKeyName="pk_doctor_requests"/>
             </column>
             <column name="doctorid" type="varchar(36)">

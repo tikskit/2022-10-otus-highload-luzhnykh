@@ -1,0 +1,23 @@
+package ru.luzhnykh.distribtx.common.dao;
+
+import ru.luzhnykh.distribtx.common.domain.DoctorRequest;
+
+/**
+ * Dao для работы с заявками на врачей
+ */
+public interface DoctorRequestDao {
+
+    /**
+     * Проверяет, сущестсвуют ли активные заявки на врача
+     * @param request Заявка
+     */
+    boolean activeExist(DoctorRequest request);
+
+    /**
+     * Добавить заявку на врача
+     * @param request
+     */
+    void addRequest(DoctorRequest request);
+
+    void cancelRequest(DoctorRequest request);
+}
