@@ -31,4 +31,20 @@ public class ProcessMapper {
                 StepState.valueOf(domain.notificationStep())
         );
     }
+
+    @SneakyThrows
+    public Process toDomain(ProcessDto dto) {
+        if (dto == null) {
+            return null;
+        }
+        return new Process(
+                dto.processId(),
+                objectMapper.writeValueAsString(dto.startParams()),
+                ProcessExecutionState.EXECUTING.name(),
+                dto.prescriptionStep().name(),
+                dto.doctorStep().name(),
+                dto.paymentStep().name(),
+                dto.notificationStep().name()
+        );
+    }
 }

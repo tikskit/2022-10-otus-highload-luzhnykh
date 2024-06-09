@@ -13,4 +13,9 @@ public interface ProcessService {
      * @param processId ИД процесса
      */
     Optional<ProcessDto> getById(String processId);
+
+    /**
+     * Обновить процесс в БД
+     */
+    void update(ProcessDto processDto);
 }

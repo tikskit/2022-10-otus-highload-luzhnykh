@@ -24,4 +24,12 @@ public class ProcessServiceImpl implements ProcessService {
     public Optional<ProcessDto> getById(String processId) {
         return dao.findById(processId).map(mapper::toDto);
     }
+
+    /**
+     * Обновить процесс в БД
+     */
+    @Override
+    public void update(ProcessDto process) {
+        dao.update(mapper.toDomain(process));
+    }
 }

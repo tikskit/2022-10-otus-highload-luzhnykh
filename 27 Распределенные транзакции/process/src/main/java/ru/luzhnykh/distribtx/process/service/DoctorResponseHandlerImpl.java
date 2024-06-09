@@ -7,6 +7,8 @@ import ru.luzhnykh.distribtx.common.dto.DoctorRequestResponseDto;
 import ru.luzhnykh.distribtx.common.enums.Action;
 import ru.luzhnykh.distribtx.common.enums.DoctorRequestRetCodes;
 import ru.luzhnykh.distribtx.process.dto.ProcessDto;
+import ru.luzhnykh.distribtx.process.enums.ProcessExecutionState;
+import ru.luzhnykh.distribtx.process.enums.StepState;
 import ru.luzhnykh.distribtx.process.exceptions.ProcessNotFoundException;
 
 /**
@@ -17,6 +19,7 @@ import ru.luzhnykh.distribtx.process.exceptions.ProcessNotFoundException;
 @Slf4j
 public class DoctorResponseHandlerImpl implements DoctorResponseHandler {
     private final ProcessService processService;
+
     /**
      * Обработать ответ
      */
@@ -52,8 +55,17 @@ public class DoctorResponseHandlerImpl implements DoctorResponseHandler {
         }
     }
 
+    /**
+     * Обработка события отмены шага назначения врача
+     * @param processDto Выполняемый процесс
+     */
     private void handleRollbackProcess(ProcessDto processDto) {
-
+        ProcessDto process = new ProcessDto(processDto.processId(), processDto.startParams(), ProcessExecutionState.ROLLING_BACK,
+                StepState.ROLLING_BACK, // Предыдущий шаг - создание назначения
+                StepState.CANCELLED, // Отмена шага резервинование врача
+                StepState.CANCELLED, StepState.CANCELLED // Шаги, которые ещё не выполнялись помечаем отмененные
+        );
+        processService.update(process);
     }
 
     private void handleDoctorRequested(DoctorRequestResponseDto responseDto) {
