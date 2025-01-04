@@ -82,7 +82,7 @@ services:
        - db_socnetslave1
        - db_socnetslave2
 
-  app_master:
+  app_1:
     build:
       context: .
       dockerfile: Dockerfile
@@ -92,7 +92,7 @@ services:
     networks:
       - net27_2
     environment:
-      - DB_URL=jdbc:postgresql://db_socnetmaster:5432/soc_net
+      - DB_URL=jdbc:postgresql://haproxy:80/soc_net
       - DB_USER=postgres
       - DB_PASS=pass
       - LIQUIBASE_ENABLED=true
