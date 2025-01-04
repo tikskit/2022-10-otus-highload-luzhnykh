@@ -82,7 +82,7 @@ services:
        - db_socnetslave1
        - db_socnetslave2
 
-  app_1:
+  app_master:
     build:
       context: .
       dockerfile: Dockerfile
@@ -92,9 +92,61 @@ services:
     networks:
       - net27_2
     environment:
-      - DB_URL=jdbc:postgresql://haproxy:80/soc_net
+      - DB_URL=jdbc:postgresql://db_socnetmaster:5432/soc_net
       - DB_USER=postgres
       - DB_PASS=pass
       - LIQUIBASE_ENABLED=true
     depends_on:
       - haproxy
+
+  app_replica_1:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "8081:8080"
+    networks:
+      - net27_2
+    environment:
+      - DB_URL=jdbc:postgresql://haproxy:80/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - LIQUIBASE_ENABLED=false
+    depends_on:
+      - app_master
+
+  app_replica_2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "8082:8080"
+    networks:
+      - net27_2
+    environment:
+      - DB_URL=jdbc:postgresql://haproxy:80/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - LIQUIBASE_ENABLED=false
+    depends_on:
+      - app_master
+
+
+  app_replica_3:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "8083:8080"
+    networks:
+      - net27_2
+    environment:
+      - DB_URL=jdbc:postgresql://haproxy:80/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - LIQUIBASE_ENABLED=false
+    depends_on:
+      - app_master
