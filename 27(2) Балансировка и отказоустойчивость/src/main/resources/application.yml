@@ -1,0 +1,23 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    master:
+      url: ${DB_URL_MASTER:jdbc:postgresql://localhost:5432/soc_net}
+      username: ${DB_USER_MASTER:postgres}
+      password: ${DB_PASS_MASTER:pass}
+    slave:
+      url: ${DB_URL_SLAVE:jdbc:postgresql://localhost:15432/soc_net}
+      username: ${DB_USER_SLAVE:postgres}
+      password: ${DB_PASS_SLAVE:pass}
+    hikari:
+#      register-mbeans: true
+      maximumPoolSize: 70
+  liquibase:
+    enabled: false
+    change-log: classpath:db/changelog/db.changelog-master.xml
+logging:
+  level:
+    ROOT: INFO
+    ru.luzhnykh.socialnet.service: INFO
+    ru.luzhnykh.socialnet.controller: INFO
