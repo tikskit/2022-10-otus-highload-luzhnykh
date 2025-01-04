@@ -69,6 +69,19 @@ services:
     depends_on:
        - db_socnetmaster
 
+  haproxy:
+    image: haproxy:2.4
+    restart: "no"
+    networks:
+      - net27_2
+    volumes:
+      - "./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    ports:
+      - "4080:80"
+    depends_on:
+       - db_socnetslave1
+       - db_socnetslave2
+
   app_master:
     build:
       context: .
@@ -84,4 +97,4 @@ services:
       - DB_PASS=pass
       - LIQUIBASE_ENABLED=true
     depends_on:
-      - db_socnetmaster
+      - haproxy
