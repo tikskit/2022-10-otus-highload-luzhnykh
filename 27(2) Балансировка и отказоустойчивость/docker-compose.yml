@@ -1,13 +1,87 @@
 version: '3'
+
+networks:
+  net27_2:
+    driver: bridge
+
 services:
-  app:
+  db_socnetmaster:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net27_2
+    volumes:
+      - F:\OTUS\HighLoad\db\hw27(2)\socnetmaster:/var/lib/postgresql/data
+    cpu_count: 1
+    mem_limit: 1gb
+    restart: unless-stopped
+    command:
+       -c shared_preload_libraries=pg_stat_statements
+       -c pg_stat_statements.track=all
+       -c max_connections=200
+
+  db_socnetslave1:
+    image: postgres:16
+    ports:
+      - "15432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net27_2
+    volumes:
+      - F:\OTUS\HighLoad\db\hw27(2)\socnetslave1:/var/lib/postgresql/data
+    cpu_count: 1
+    mem_limit: 1gb
+    restart: unless-stopped
+    command:
+       -c shared_preload_libraries=pg_stat_statements 
+       -c pg_stat_statements.track=all
+       -c max_connections=200
+    depends_on:
+       - db_socnetmaster
+
+  db_socnetslave2:
+    image: postgres:16
+    ports:
+      - "25432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net27_2
+    volumes:
+      - F:\OTUS\HighLoad\db\hw27(2)\socnetslave2:/var/lib/postgresql/data
+    cpu_count: 1
+    mem_limit: 1gb
+    restart: unless-stopped
+    command:
+       -c shared_preload_libraries=pg_stat_statements 
+       -c pg_stat_statements.track=all
+       -c max_connections=200
+    depends_on:
+       - db_socnetmaster
+
+  app_master:
     build:
       context: .
       dockerfile: Dockerfile
     privileged: true
     ports:
       - "8080:8080"
+    networks:
+      - net27_2
     environment:
-      - DB_RUL=jdbc:postgresql://localhost:55432/soc_net
-      - DB_USER=dbuser
+      - DB_URL=jdbc:postgresql://db_socnetmaster:5432/soc_net
+      - DB_USER=postgres
       - DB_PASS=pass
+      - LIQUIBASE_ENABLED=true
+    depends_on:
+      - db_socnetmaster

@@ -1,30 +1,23 @@
-# Создаем сеть
-docker network create socnetnet
+# РЎРѕР·РґР°РµРј СЃРµС‚СЊ
+docker network create net27_2
 
-# получаем subnet созданной сети
-docker network inspect socnetnet
-"Subnet": "172.21.0.0/16"
+# РџРѕР»СѓС‡Р°РµРј subnet СЃРѕР·РґР°РЅРЅРѕР№ СЃРµС‚Рё
+docker network inspect net27_2
+"Subnet": "172.22.0.0/16"
 
-# Собираем образ докер
+# РЎРѕР±РёСЂР°РµРј РѕР±СЂР°Р· docker
 docker build -t socnet_app_27_2:latest .
 
-# Запускаем master
-docker run -d -p 5432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetmaster:/var/lib/postgresql/data" --network=socnetnet --name socnetmaster --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+# Р—Р°РїСѓСЃРєР°РµРј master
+docker run -d -p 5432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetmaster:/var/lib/postgresql/data" --network=net27_2 --name socnetmaster --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
 #slave1
-docker run -d -p 15432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetslave1:/var/lib/postgresql/data" --network=socnetnet --name socnetslave1 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+docker run -d -p 15432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetslave1:/var/lib/postgresql/data" --network=net27_2 --name socnetslave1 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
 #slave2
-docker run -d -p 15432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetslave2:/var/lib/postgresql/data" --network=socnetnet --name socnetslave2 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+docker run -d -p 25432:5432 --cpus=1 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetslave2:/var/lib/postgresql/data" --network=net27_2 --name socnetslave2 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
 
-# Запускаем приложение и передаем ему строку подключения к мастеру и чтение и запись делаем на мастер. 
-docker run -dit -p 8080:8080 -p 1234:1234 --cpus=10 --name socnet --network=socnetnet -e DB_URL_MASTER=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER_MASTER=postgres -e DB_PASS_MASTER=pass -e DB_URL_SLAVE=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER_SLAVE=postgres -e DB_PASS_SLAVE=pass socnet_app_27_2
-# Запускаем приложение и передаем ему строку подключения к мастеру и слейву. Чтение делаем со слейва, запись на мастер. 
-docker run -dit -p 8080:8080 -p 1234:1234 --cpus=10 --name socnet --network=socnetnet -e DB_URL_MASTER=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER_MASTER=postgres -e DB_PASS_MASTER=pass -e DB_URL_SLAVE=jdbc:postgresql://socnetslave1:5432/soc_net -e DB_USER_SLAVE=postgres -e DB_PASS_SLAVE=pass socnet_app_27_2
-
-
-
-
-#запускаем синхронную реплику 1
-docker run -d -p 25432:5432 --cpus=4 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetslavesync1:/var/lib/postgresql/data" --network=socnetnet --name socnetslavesync1 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
-
-#запускаем синхронную реплику 1
-docker run -d -p 35432:5432 --cpus=4 -m 1Gb -v "F:\OTUS\HighLoad\db\hw27(2)\socnetslavesync2:/var/lib/postgresql/data" --network=socnetnet --name socnetslavesync2 --restart=unless-stopped -e POSTGRES_PASSWORD=pass -e POSTGRES_USER=postgres -e POSTGRES_DB=soc_net postgres:16 -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all -c max_connections=200
+# Р—Р°РїСѓСЃРєР°РµРј РїСЂРёР»РѕР¶РµРЅРёРµ Рё РїРµСЂРµРґР°РµРј РµРјСѓ СЃС‚СЂРѕРєСѓ РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє РјР°СЃС‚РµСЂСѓ
+docker run -dit -p 8080:8080 -p 1234:1234 --cpus=10 --name socnet --network=net27_2 -e DB_URL=jdbc:postgresql://socnetmaster:5432/soc_net -e DB_USER=postgres -e DB_PASS=pass -e LIQUIBASE_ENABLED=true socnet_app_27_2
+# Р—Р°РїСѓСЃРєР°РµРј РїСЂРёР»РѕР¶РµРЅРёРµ slave 1 Рё РїРµСЂРµРґР°РµРј РµРјСѓ СЃС‚СЂРѕРєСѓ РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє slave1
+docker run -dit -p 18080:8080 -p 11234:1234 --cpus=10 --name socnet_slave1 --network=net27_2 -e DB_URL=jdbc:postgresql://socnetslave1:5432/soc_net -e DB_USER=postgres -e DB_PASS=pass -e LIQUIBASE_ENABLED=false socnet_app_27_2
+# Р—Р°РїСѓСЃРєР°РµРј РїСЂРёР»РѕР¶РµРЅРёРµ slave 2 Рё РїРµСЂРµРґР°РµРј РµРјСѓ СЃС‚СЂРѕРєСѓ РґР»СЏ РїРѕРґРєР»СЋС‡РµРЅРёСЏ Рє slave2
+docker run -dit -p 28080:8080 -p 21234:1234 --cpus=10 --name socnet_slave2 --network=net27_2 -e DB_URL=jdbc:postgresql://socnetslave2:5432/soc_net -e DB_USER=postgres -e DB_PASS=pass -e LIQUIBASE_ENABLED=false socnet_app_27_2

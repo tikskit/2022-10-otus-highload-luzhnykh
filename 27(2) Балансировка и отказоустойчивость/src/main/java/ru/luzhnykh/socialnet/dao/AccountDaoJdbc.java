@@ -1,6 +1,6 @@
 package ru.luzhnykh.socialnet.dao;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -11,26 +11,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
+@RequiredArgsConstructor
 public class AccountDaoJdbc implements AccountDao {
 
-    private final JdbcOperations jdbcReader;
-    private final JdbcOperations jdbcWriter;
+    private final JdbcOperations jdbc;
 
-    public AccountDaoJdbc(@Qualifier("slaveJdbcOperations") JdbcOperations jdbcReader,
-                       @Qualifier("masterJdbcOperations") JdbcOperations jdbcWriter) {
-        this.jdbcReader = jdbcReader;
-        this.jdbcWriter = jdbcWriter;
-    }
 
     @Override
     public void addAccount(AccountDto account) {
-        jdbcWriter.update("insert into socnet.accounts(userid, passhash) values(?, ?)", account.userId(), account.passHash());
+        jdbc.update("insert into socnet.accounts(userid, passhash) values(?, ?)", account.userId(), account.passHash());
     }
 
     @Override
     public boolean match(AccountDto account) {
         try {
-            jdbcReader.queryForObject("select userid, passhash from socnet.accounts where userid=? and passhash=?",
+            jdbc.queryForObject("select userid, passhash from socnet.accounts where userid=? and passhash=?",
                     new AccountMapper(), account.userId(), account.passHash());
             return true;
         } catch (IncorrectResultSizeDataAccessException e) {
