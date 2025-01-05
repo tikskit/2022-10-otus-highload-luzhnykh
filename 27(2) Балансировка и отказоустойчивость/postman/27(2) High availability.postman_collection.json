@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "f5e80e00-31ee-4c17-96c0-3238a46056b7",
+		"name": "27(2) High availability",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18165428"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "/user/get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "af4581cc-269d-4026-86e2-a86e2ec3317e",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/user/get/0055d52f-8ec8-4b5a-9d49-6ad80f48a9bd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"get",
+								"0055d52f-8ec8-4b5a-9d49-6ad80f48a9bd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "d6671945-cfe6-41a2-8846-b60ed837d75e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"user12\",\r\n    \"first_name\": \"firstName\",\r\n    \"second_name\": \"lastName\",\r\n    \"birthdate\": \"2001-05-07\",\r\n    \"sex\": 1,\r\n    \"biography\": \"none\",\r\n    \"city\": \"NY\",\r\n    \"password\": \"pass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:18080/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "18080",
+							"path": [
+								"user",
+								"register"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "b86b794e-b4c0-4cff-9c03-7e9483e3897e",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/user/search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/search?first_name=Peggy&last_name=Kreiger",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"search"
+							],
+							"query": [
+								{
+									"key": "first_name",
+									"value": "Peggy"
+								},
+								{
+									"key": "last_name",
+									"value": "Kreiger"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
