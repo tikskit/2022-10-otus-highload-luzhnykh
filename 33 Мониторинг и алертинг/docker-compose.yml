@@ -1,49 +1,100 @@
 version: '3'
 
 networks:
-  net08:
+  net33:
     driver: bridge
 
 services:
-  pg:
+  zabbix_pg:
     image: postgres:16
     ports:
-      - "15432:5432"
+      - "25432:5432"
     environment:
       - POSTGRES_PASSWORD=pass
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=soc_net
+      - POSTGRES_DB=zabbix
     networks:
-      - net08
-  dialogs:
-    build:
-      context: .\dialogs
-      dockerfile: Dockerfile
-    container_name: dialogs
-    ports:
-      - "18081:8081"
+      - net33
+#  dialogs:
+#    build:
+#      context: .\dialogs
+#      dockerfile: Dockerfile
+#    container_name: dialogs
+#    ports:
+#      - "18081:8081"
+#    networks:
+#      - net33
+#    environment:
+#      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+#      - DB_USER=postgres
+#      - DB_PASS=pass
+#    depends_on:
+#      - pg
+#  main: 
+#    build:
+#      context: .\main
+#      dockerfile: Dockerfile
+#    container_name: main
+#    ports:
+#      - "18080:8080"
+#    networks:
+#      - net33
+#    environment:
+#      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+#      - DB_USER=postgres
+#      - DB_PASS=pass
+#      - DIALOGS_ADDRESS=http://dialogs:8081
+#    depends_on:
+#      - dialogs
+#      - pg
+  zabbix-java-gateway:
+    image: zabbix/zabbix-java-gateway
     networks:
-      - net08
+      - net33
+
+  zabbix-server-pgsql:
+    image: zabbix/zabbix-server-pgsql
     environment:
-      - DB_URL=jdbc:postgresql://pg:5432/soc_net
-      - DB_USER=postgres
-      - DB_PASS=pass
-    depends_on:
-      - pg
-  main: 
-    build:
-      context: .\main
-      dockerfile: Dockerfile
-    container_name: main
+      - DB_SERVER_HOST=zabbix_pg
+      - DB_SERVER_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=zabbix
+      - ZBX_JAVAGATEWAY=zabbix-java-gateway
     ports:
-      - "18080:8080"
+      - 10051:10051
     networks:
-      - net08
-    environment:
-      - DB_URL=jdbc:postgresql://pg:5432/soc_net
-      - DB_USER=postgres
-      - DB_PASS=pass
-      - DIALOGS_ADDRESS=http://dialogs:8081
+      - net33
     depends_on:
-      - dialogs
-      - pg
+      - zabbix_pg
+      - zabbix-java-gateway
+
+  zabbix-web-nginx-pgsql:
+    image: zabbix/zabbix-web-nginx-pgsql
+    environment:
+      - ZBX_SERVER_HOST=zabbix-server-pgsql
+      - DB_SERVER_HOST=zabbix_pg
+      - DB_SERVER_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=zabbix
+    ports:
+      - 80:8080
+    networks:
+      - net33
+    depends_on:
+      - zabbix-server-pgsql
+  zabbix-agent:
+    image: zabbix/zabbix-agent
+    networks:
+      - net33
+    environment:
+      - ZBX_HOSTNAME=my-hostname
+      - ZBX_SERVER_HOST=zabbix-server-pgsql
+      - ZBX_SERVER_PORT=10051
+      - ZBX_ACTIVE_ALLOW=true
+      - ZBX_PASSIVE_ALLOW=true
+    ports:
+      - 10050:10050
+    depends_on:
+      - zabbix-server-pgsql
