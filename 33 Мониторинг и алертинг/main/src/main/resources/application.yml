@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/soc_net}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:pass}
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.xml
+dialogs:
+  address: ${DIALOGS_ADDRESS:http://localhost:8081}
+logging:
+  level:
+    ru.luzhnykh: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true

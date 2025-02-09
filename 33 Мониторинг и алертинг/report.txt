@@ -1,0 +1,4 @@
+Что сделал:
+1. Установил Zabbix агент docker pull zabbix/zabbix-agent
+2. Установил Zabbix сервер с поддержкой PostgreSQL docker pull zabbix/zabbix-server-pgsql
+3. Установил Веб-интерфейс Zabbix на основе веб-сервера Nginx с поддержкой PostgreSQL docker pull zabbix/zabbix-web-nginx-pgsql
