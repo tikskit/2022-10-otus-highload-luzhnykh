@@ -1,0 +1,312 @@
+{
+	"info": {
+		"_postman_id": "ca5f1d08-6274-477f-9a43-4549c7d9c7f1",
+		"name": "33 Monitoring und alerting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18165428"
+	},
+	"item": [
+		{
+			"name": "/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"root\",\r\n    \"password\": \"root\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "af4581cc-269d-4026-86e2-a86e2ec3317e",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/user/get/0055d52f-8ec8-4b5a-9d49-6ad80f48a9bd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"get",
+						"0055d52f-8ec8-4b5a-9d49-6ad80f48a9bd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "d6671945-cfe6-41a2-8846-b60ed837d75e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"user12\",\r\n    \"first_name\": \"firstName\",\r\n    \"second_name\": \"lastName\",\r\n    \"birthdate\": \"2001-05-07\",\r\n    \"sex\": 1,\r\n    \"biography\": \"none\",\r\n    \"city\": \"NY\",\r\n    \"password\": \"pass\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"user",
+						"register"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "b86b794e-b4c0-4cff-9c03-7e9483e3897e",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/dialog/send from main",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "d6671945-cfe6-41a2-8846-b60ed837d75e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"привет!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:18080/dialog/a216d79c-345e-4ef8-ae80-c06c5f16b2b7/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "18080",
+					"path": [
+						"dialog",
+						"a216d79c-345e-4ef8-ae80-c06c5f16b2b7",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/friend/set/{user_id}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "0d0180c0-564a-43fc-831a-415d622b5b6f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/set/45aaf307-cf29-468e-8d73-ed5b0aa48a1b?user_id=7f55b35f-141e-4130-b05a-3089007e1960",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"set",
+						"45aaf307-cf29-468e-8d73-ed5b0aa48a1b"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "7f55b35f-141e-4130-b05a-3089007e1960"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/friend/delete",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "token",
+						"value": "0d0180c0-564a-43fc-831a-415d622b5b6f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/friend/delete/45aaf307-cf29-468e-8d73-ed5b0aa48a1b?user_id=7f55b35f-141e-4130-b05a-3089007e1960",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"friend",
+						"delete",
+						"45aaf307-cf29-468e-8d73-ed5b0aa48a1b"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "7f55b35f-141e-4130-b05a-3089007e1960"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/dialog/send from dialogs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "token",
+						"value": "e43115d5-37a0-4ecc-bb90-bb15c4b900cf",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"text\": \"привет!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/dialog/6d868e73-a2b9-4385-8a4e-eca89057641e/send",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"dialog",
+						"6d868e73-a2b9-4385-8a4e-eca89057641e",
+						"send"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "b86b794e-b4c0-4cff-9c03-7e9483e3897e",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/user/search",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "token",
+						"value": "b5516e5f-9792-4653-9ed9-b915e4c323f5",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/user/search?first_name=Peggy&last_name=Kreiger",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"search"
+					],
+					"query": [
+						{
+							"key": "first_name",
+							"value": "Peggy"
+						},
+						{
+							"key": "last_name",
+							"value": "Kreiger"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
