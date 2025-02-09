@@ -5,6 +5,50 @@ networks:
     driver: bridge
 
 services:
+  pg:
+    image: postgres:16
+    ports:
+      - "15432:5432"
+    environment:
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=soc_net
+    networks:
+      - net33
+  dialogs:
+    build:
+      context: .\dialogs
+      dockerfile: Dockerfile
+    container_name: dialogs
+    ports:
+      - "18081:8081"
+    networks:
+      - net33
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+    depends_on:
+      - pg
+
+  main: 
+    build:
+      context: .\main
+      dockerfile: Dockerfile
+    container_name: main
+    ports:
+      - "18080:8080"
+    networks:
+      - net33
+    environment:
+      - DB_URL=jdbc:postgresql://pg:5432/soc_net
+      - DB_USER=postgres
+      - DB_PASS=pass
+      - DIALOGS_ADDRESS=http://dialogs:8081
+    depends_on:
+      - dialogs
+      - pg
+
   zabbix_pg:
     image: postgres:16
     ports:
@@ -15,38 +59,6 @@ services:
       - POSTGRES_DB=zabbix
     networks:
       - net33
-#  dialogs:
-#    build:
-#      context: .\dialogs
-#      dockerfile: Dockerfile
-#    container_name: dialogs
-#    ports:
-#      - "18081:8081"
-#    networks:
-#      - net33
-#    environment:
-#      - DB_URL=jdbc:postgresql://pg:5432/soc_net
-#      - DB_USER=postgres
-#      - DB_PASS=pass
-#    depends_on:
-#      - pg
-#  main: 
-#    build:
-#      context: .\main
-#      dockerfile: Dockerfile
-#    container_name: main
-#    ports:
-#      - "18080:8080"
-#    networks:
-#      - net33
-#    environment:
-#      - DB_URL=jdbc:postgresql://pg:5432/soc_net
-#      - DB_USER=postgres
-#      - DB_PASS=pass
-#      - DIALOGS_ADDRESS=http://dialogs:8081
-#    depends_on:
-#      - dialogs
-#      - pg
   zabbix-java-gateway:
     image: zabbix/zabbix-java-gateway
     networks:
@@ -98,3 +110,22 @@ services:
       - 10050:10050
     depends_on:
       - zabbix-server-pgsql
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - net33
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - net33

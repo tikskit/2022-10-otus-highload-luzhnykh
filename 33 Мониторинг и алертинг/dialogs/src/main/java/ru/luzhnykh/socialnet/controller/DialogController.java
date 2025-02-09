@@ -1,5 +1,6 @@
 package ru.luzhnykh.socialnet.controller;
 
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class DialogController {
     private final DialogService dialogService;
     private final EteLogId eteLogId;
 
+    @Timed("dialog_send_api")
     @PostMapping("/dialog/{user_id}/send")
     public ResponseEntity<String> send(@PathVariable String user_id, @RequestBody DialogRequestDto text,
                                        @RequestHeader(value = LOG_ID_HEADER, required = false) String logId,
