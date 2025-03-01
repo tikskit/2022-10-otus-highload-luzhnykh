@@ -21,11 +21,13 @@ public class PostServiceImpl implements PostService {
 
     private final PostDao postDao;
     private final FeedService feedService;
+    private final FeedUpdateNotifierService feedUpdateNotifierService;
 
     @Override
     public CreatePostResDto add(CreatePostDto createPostDto) {
         String postId = UUID.randomUUID().toString();
         postDao.create(postId, createPostDto.author_user_id(), createPostDto.text());
+        feedUpdateNotifierService.afterUpdate(postId, createPostDto.text(), createPostDto.author_user_id());
         return new CreatePostResDto(postId);
     }
 

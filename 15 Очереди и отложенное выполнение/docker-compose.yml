@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  net11:
+  net15:
     driver: bridge
 
 services:
@@ -14,13 +14,13 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_DB=soc_net
     networks:
-      - net11
+      - net15
   redis:
     image: redis:latest
     ports:
       - "6379:6379"
     networks:
-      - net11
+      - net15
   app: 
     build:
       context: .
@@ -29,7 +29,7 @@ services:
     ports:
       - "8080:8080"
     networks:
-      - net11
+      - net15
     environment:
       - DB_URL=jdbc:postgresql://pg:5432/soc_net
       - DB_USER=postgres

@@ -3,6 +3,10 @@ package ru.luzhnykh.socialnet.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.luzhnykh.socialnet.dao.FriendDao;
+import ru.luzhnykh.socialnet.dto.FriendDto;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Реализация сущности Друг
@@ -33,5 +37,12 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public void delFriend(String userId, String friendUserId) {
         friendDao.delete(userId, friendUserId);
+    }
+
+    @Override
+    public Set<String> getFriendsOf(String userId) {
+        return friendDao.getFriendsOf(userId).stream()
+                .map(FriendDto::friendId)
+                .collect(Collectors.toSet());
     }
 }
